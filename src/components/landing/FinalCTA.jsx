@@ -1,46 +1,9 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import React from 'react';
 import { useLanguage } from '@/lib/LanguageContext';
-import { buildLeadPayload, captureAttribution, detectDevice, submitLead } from '@/lib/leads';
+import LeadForm from '@/components/landing/LeadForm';
 
 export default function FinalCTA() {
-  const { t, lang } = useLanguage();
-  const [focusedField, setFocusedField] = useState(null);
-  const [status, setStatus] = useState('idle');
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const fields = Object.fromEntries(new FormData(form).entries());
-    const attribution = captureAttribution(window.location.search, window.sessionStorage);
-    const payload = buildLeadPayload(fields, {
-      language: lang,
-      page: window.location.href,
-      source: 'website-contact',
-      site: window.location.hostname,
-      device: detectDevice(navigator.userAgent, window.innerWidth),
-      form: 'contact',
-      ...attribution,
-    });
-
-    setStatus('sending');
-    try {
-      await submitLead(payload);
-      setStatus('submitted');
-      form.reset();
-    } catch (err) {
-      console.error('Lead submit failed:', err);
-      setStatus('error');
-    }
-  };
-
-  const fields = [
-    { id: 'name', label: t.contact.fields.name, type: 'text', placeholder: t.contact.fields.namePlaceholder },
-    { id: 'email', label: t.contact.fields.email, type: 'email', placeholder: t.contact.fields.emailPlaceholder },
-    { id: 'country', label: t.contact.fields.country, type: 'text', placeholder: t.contact.fields.countryPlaceholder },
-    { id: 'role', label: t.contact.fields.role, type: 'text', placeholder: t.contact.fields.rolePlaceholder },
-  ];
+  const { t } = useLanguage();
 
   const meta = [
     { label: t.contact.meta.headquarters, value: t.contact.meta.headquartersValue },
@@ -50,7 +13,6 @@ export default function FinalCTA() {
 
   return (
     <section id="contact" className="relative py-16 lg:py-36 overflow-hidden" style={{ backgroundColor: '#00001a' }}>
-      {/* Macro background text */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
         <span
           className="b2g-h leading-none text-center"
@@ -62,7 +24,6 @@ export default function FinalCTA() {
 
       <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-          {/* Left — statement */}
           <div className="lg:col-span-5">
             <span className="b2g-label block mb-6">{t.contact.label}</span>
             <h2 className="b2g-h text-b2g-white text-4xl lg:text-5xl xl:text-6xl leading-[1.05]">
@@ -81,7 +42,6 @@ export default function FinalCTA() {
               ))}
             </div>
 
-            {/* Contact details */}
             <div className="mt-10 pt-8 border-t border-b2g-copper/15">
               <p className="b2g-label mb-6">{t.contact.gatewayDetails}</p>
               <ul className="space-y-5">
@@ -102,96 +62,8 @@ export default function FinalCTA() {
             </div>
           </div>
 
-          {/* Right — form */}
           <div className="lg:col-span-6 lg:col-start-7">
-            <motion.form
-              onSubmit={handleSubmit}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="p-6 sm:p-8 lg:p-10 border border-b2g-copper/15"
-              style={{ borderRadius: '2px', backgroundColor: '#050530' }}
-            >
-              <p className="b2g-label mb-8">{t.contact.gateway}</p>
-
-              <div className="space-y-8">
-                {fields.map((field) => (
-                  <div key={field.id}>
-                    <label htmlFor={field.id} className="b2g-label block mb-3">
-                      {field.label}
-                    </label>
-                    <div className="relative">
-                      <input
-                        id={field.id}
-                        name={field.id}
-                        type={field.type}
-                        placeholder={field.placeholder}
-                        onFocus={() => setFocusedField(field.id)}
-                        onBlur={() => setFocusedField(null)}
-                        className="w-full bg-transparent border-0 border-b text-b2g-white placeholder:text-b2g-slate/40 py-3 text-base b2g-focus-ring transition-colors"
-                        style={{
-                          borderBottomColor: focusedField === field.id ? '#00ff9d' : 'rgba(0, 102, 255, 0.2)',
-                        }}
-                        required
-                      />
-                      {focusedField === field.id && (
-                        <motion.div
-                          layoutId="field-underline"
-                          className="absolute bottom-0 left-0 right-0 h-px"
-                          style={{ backgroundColor: '#00ff9d' }}
-                        />
-                      )}
-                    </div>
-                  </div>
-                ))}
-
-                <div>
-                  <label htmlFor="message" className="b2g-label block mb-3">
-                    {t.contact.message}
-                  </label>
-                  <div className="relative">
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={3}
-                      placeholder={t.contact.messagePlaceholder}
-                      onFocus={() => setFocusedField('message')}
-                      onBlur={() => setFocusedField(null)}
-                      className="w-full bg-transparent border-0 border-b text-b2g-white placeholder:text-b2g-slate/40 py-3 text-base b2g-focus-ring transition-colors resize-none"
-                      style={{
-                        borderBottomColor: focusedField === 'message' ? '#00ff9d' : 'rgba(0, 102, 255, 0.2)',
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <label className="mt-8 flex items-start gap-3 text-xs text-b2g-slate/80 leading-relaxed cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="consent"
-                  value="yes"
-                  required
-                  className="mt-0.5 h-4 w-4 shrink-0 accent-[#00ff9d]"
-                />
-                <span>{t.contact.consent}</span>
-              </label>
-
-              <button
-                type="submit"
-                disabled={status === 'sending' || status === 'submitted'}
-                className="mt-6 w-full b2g-copper-bg px-8 py-4 text-sm font-semibold tracking-wide flex items-center justify-center gap-2 b2g-focus-ring transition-transform hover:scale-[1.01] active:scale-95 disabled:opacity-60"
-                style={{ borderRadius: '2px', minHeight: '44px' }}
-              >
-                {status === 'submitted' ? t.contact.submitted : status === 'sending' ? t.contact.sending : t.contact.submit}
-                {status === 'idle' && <ArrowRight size={16} />}
-              </button>
-
-              {status === 'error' && (
-                <p className="mt-3 text-xs text-red-400 text-center">{t.contact.error}</p>
-              )}
-            </motion.form>
+            <LeadForm source="website-contact" form="contact" />
           </div>
         </div>
       </div>

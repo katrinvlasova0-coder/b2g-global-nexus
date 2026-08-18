@@ -44,6 +44,12 @@ export default function Navbar() {
             </SectionLink>
           ))}
           <Link
+            to="/blog"
+            className="b2g-link-underline text-sm font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors b2g-focus-ring"
+          >
+            {t.nav.blog}
+          </Link>
+          <Link
             to="/platform"
             className="b2g-link-underline text-sm font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors b2g-focus-ring"
           >
@@ -100,6 +106,9 @@ export default function Navbar() {
                 {link.label}
               </SectionLink>
             ))}
+            <Link to="/blog" onClick={close} className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors">
+              {t.nav.blog}
+            </Link>
             <Link to="/platform" onClick={close} className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors">
               {t.nav.platform}
             </Link>
