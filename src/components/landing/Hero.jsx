@@ -3,6 +3,8 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { Image } from '@/components/ui/image';
 import { useLanguage } from '@/lib/LanguageContext';
+import SectionLink from '@/components/landing/SectionLink';
+import { PITCH_DECK_FILE, publicHref } from '@/lib/data-room';
 
 const HERO_IMG = 'https://media.base44.com/images/public/6a75e02537c947dc2e12eea1/4ba7359c6_generated_ae1eac8b.png';
 
@@ -83,29 +85,28 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.65 }}
             className="mt-10 flex flex-col sm:flex-row gap-4"
           >
-            <a
-              href="#contact"
+            <SectionLink
+              hash="#contact"
               className="b2g-copper-bg b2g-glow px-7 py-4 text-sm font-semibold tracking-wide flex items-center justify-center gap-2 b2g-focus-ring transition-transform hover:scale-[1.02] active:scale-95"
               style={{ borderRadius: '2px', minHeight: '44px' }}
             >
               {t.hero.ctaPrimary}
               <ArrowUpRight size={18} />
-            </a>
-            <a
-              href="#who-we-seek"
+            </SectionLink>
+            <SectionLink
+              hash="#who-we-seek"
               className="px-7 py-4 text-sm font-semibold tracking-wide flex items-center justify-center gap-2 border border-b2g-white/20 text-b2g-white hover:border-b2g-copper/50 hover:text-b2g-copper transition-colors b2g-focus-ring"
               style={{ borderRadius: '2px', minHeight: '44px' }}
             >
               {t.hero.ctaSecondary}
-            </a>
+            </SectionLink>
             <a
-              href="https://media.base44.com/files/public/6a75e02537c947dc2e12eea1/d3bb68961_B2GPitchdeckEnd.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+              href={publicHref(PITCH_DECK_FILE)}
+              download="B2G-Pitch-Deck.pdf"
               className="px-7 py-4 text-sm font-semibold tracking-wide flex items-center justify-center gap-2 border border-b2g-cyan/40 text-b2g-cyan hover:border-b2g-cyan hover:bg-b2g-cyan/10 transition-colors b2g-focus-ring"
               style={{ borderRadius: '2px', minHeight: '44px' }}
             >
-              B2G Pitch Deck
+              {t.nav.pitchDeck}
               <ArrowUpRight size={18} />
             </a>
           </motion.div>

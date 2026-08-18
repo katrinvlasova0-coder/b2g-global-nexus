@@ -8,6 +8,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
 import Landing from '@/pages/Landing';
 import Platform from '@/pages/Platform';
+import DataRoom from '@/pages/DataRoom';
 import { LanguageProvider } from '@/lib/LanguageContext';
 // Add page imports here
 
@@ -40,6 +41,7 @@ const AuthenticatedApp = () => {
       {/* Add your page Route elements here */}
       <Route path="/" element={<Landing />} />
       <Route path="/platform" element={<Platform />} />
+      <Route path="/data-room" element={<DataRoom />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

@@ -14,6 +14,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
+import SectionLink from '@/components/landing/SectionLink';
 
 const ICONS = [Search, FileText, Landmark, HardHat, Network, GraduationCap];
 const IMAGES = [
@@ -171,12 +172,12 @@ export default function CapabilityCenter() {
                 <div className="p-8">
                   <h3 className="b2g-h text-b2g-white text-xl lg:text-2xl mb-3 leading-tight">{cap.title}</h3>
                   <p className="text-sm text-b2g-slate leading-relaxed">{cap.description}</p>
-                  <a
-                    href="#contact"
+                  <SectionLink
+                    hash="#contact"
                     className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium b2g-copper b2g-link-underline b2g-focus-ring"
                   >
                     {t.capabilities.learnMore} <ArrowUpRight size={14} />
-                  </a>
+                  </SectionLink>
                 </div>
               </motion.article>
             );

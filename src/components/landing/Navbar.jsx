@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import Logo from '@/components/landing/Logo';
 import LanguageSwitcher from '@/components/landing/LanguageSwitcher';
+import SectionLink from '@/components/landing/SectionLink';
 import { useLanguage } from '@/lib/LanguageContext';
 
 export default function Navbar() {
@@ -11,12 +12,10 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   const NAV_LINKS = [
-    { label: t.nav.whoWeSeek, href: '#who-we-seek' },
-    { label: t.nav.expertise, href: '#expertise' },
-    { label: t.nav.capabilities, href: '#capabilities' },
+    { label: t.nav.whoWeSeek, hash: '#who-we-seek' },
+    { label: t.nav.expertise, hash: '#expertise' },
+    { label: t.nav.capabilities, hash: '#capabilities' },
   ];
-
-  const DATA_ROOM_URL = 'https://drive.google.com/drive/folders/1KHXnATYtmULoxkyvdUQJxKf4u4M3sDkz';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -24,55 +23,55 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const close = () => setOpen(false);
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'b2g-glass' : 'bg-transparent'}`}>
       <nav className="max-w-[1400px] mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
-        <a href="#top" className="flex items-center group" aria-label="B2G Global Services Corp — home">
+        <SectionLink hash="#top" className="flex items-center group" aria-label="B2G Global Services Corp — home">
           <span className="w-px h-6 lg:h-9 bg-b2g-copper mr-px shrink-0" />
           <Logo className="h-9 lg:h-14" />
-        </a>
+        </SectionLink>
 
         <div className="hidden lg:flex items-center gap-9">
           {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
+            <SectionLink
+              key={link.hash}
+              hash={link.hash}
               className="b2g-link-underline text-sm font-medium text-b2g-white/80 hover:text-b2g-white transition-colors b2g-focus-ring"
             >
               {link.label}
-            </a>
+            </SectionLink>
           ))}
           <Link
             to="/platform"
             className="b2g-link-underline text-sm font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors b2g-focus-ring"
           >
-            Platform
+            {t.nav.platform}
           </Link>
-          <a
-            href={DATA_ROOM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to="/data-room"
             className="b2g-link-underline text-sm font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors b2g-focus-ring"
           >
-            Data room
-          </a>
-          <a
-            href="#contact"
+            {t.nav.dataRoom}
+          </Link>
+          <SectionLink
+            hash="#contact"
             className="b2g-link-underline text-sm font-medium text-b2g-white/80 hover:text-b2g-white transition-colors b2g-focus-ring"
           >
             {t.nav.contact}
-          </a>
+          </SectionLink>
         </div>
 
         <div className="hidden lg:flex items-center gap-4">
           <LanguageSwitcher />
-          <a
-            href="#contact"
+          <SectionLink
+            hash="#contact"
             className="b2g-copper-bg px-5 py-2.5 text-sm font-semibold tracking-wide b2g-focus-ring transition-transform hover:scale-[1.03] active:scale-95"
             style={{ borderRadius: '2px' }}
           >
             {t.nav.requestConsultation}
-          </a>
+          </SectionLink>
         </div>
 
         <div className="lg:hidden flex items-center gap-2">
@@ -92,46 +91,32 @@ export default function Navbar() {
         <div className="lg:hidden b2g-glass border-t border-b2g-copper/10">
           <div className="px-6 py-6 flex flex-col gap-5">
             {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
+              <SectionLink
+                key={link.hash}
+                hash={link.hash}
+                onClick={close}
                 className="text-base font-medium text-b2g-white/80 hover:text-b2g-copper transition-colors"
               >
                 {link.label}
-              </a>
+              </SectionLink>
             ))}
-            <Link
-              to="/platform"
-              onClick={() => setOpen(false)}
-              className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors"
-            >
-              Platform
+            <Link to="/platform" onClick={close} className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors">
+              {t.nav.platform}
             </Link>
-            <a
-              href={DATA_ROOM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setOpen(false)}
-              className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors"
-            >
-              Data room
-            </a>
-            <a
-              href="#contact"
-              onClick={() => setOpen(false)}
-              className="text-base font-medium text-b2g-white/80 hover:text-b2g-copper transition-colors"
-            >
+            <Link to="/data-room" onClick={close} className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors">
+              {t.nav.dataRoom}
+            </Link>
+            <SectionLink hash="#contact" onClick={close} className="text-base font-medium text-b2g-white/80 hover:text-b2g-copper transition-colors">
               {t.nav.contact}
-            </a>
-            <a
-              href="#contact"
-              onClick={() => setOpen(false)}
+            </SectionLink>
+            <SectionLink
+              hash="#contact"
+              onClick={close}
               className="b2g-copper-bg px-5 py-3 text-sm font-semibold text-center mt-2"
               style={{ borderRadius: '2px' }}
             >
               {t.nav.requestConsultation}
-            </a>
+            </SectionLink>
           </div>
         </div>
       )}

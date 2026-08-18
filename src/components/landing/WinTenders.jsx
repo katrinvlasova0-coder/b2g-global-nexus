@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
+import SectionLink from '@/components/landing/SectionLink';
 
 export default function WinTenders() {
   const { t } = useLanguage();
@@ -10,7 +11,7 @@ export default function WinTenders() {
   return (
     <section id="expertise" className="relative py-16 lg:py-36 overflow-hidden" style={{ backgroundColor: '#00001a' }}>
       {/* Grid overlay */}
-      <div className="absolute inset-0 b2g-grid-overlay opacity-60" aria-hidden="true" />
+      <div className="absolute inset-0 b2g-grid-overlay opacity-60 pointer-events-none" aria-hidden="true" />
 
       <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16">
@@ -67,13 +68,13 @@ export default function WinTenders() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="mt-10"
             >
-              <a
-                href="#contact"
+              <SectionLink
+                hash="#contact"
                 className="inline-flex items-center justify-center b2g-copper-bg px-8 py-4 text-sm font-semibold tracking-wide b2g-focus-ring transition-transform hover:scale-[1.02] active:scale-95"
                 style={{ borderRadius: '2px', minHeight: '44px' }}
               >
                 {t.expertise.cta}
-              </a>
+              </SectionLink>
             </motion.div>
           </div>
         </div>

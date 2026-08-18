@@ -2,16 +2,31 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
+import { buildLeadPayload, submitLead } from '@/lib/leads';
 
 export default function FinalCTA() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [focusedField, setFocusedField] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState('idle');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
+    const form = e.currentTarget;
+    const fields = Object.fromEntries(new FormData(form).entries());
+    const payload = buildLeadPayload(fields, {
+      language: lang,
+      page: window.location.href,
+    });
+
+    setStatus('sending');
+    try {
+      await submitLead(payload);
+      setStatus('submitted');
+      form.reset();
+    } catch (err) {
+      console.error('Lead submit failed:', err);
+      setStatus('error');
+    }
   };
 
   const fields = [
@@ -103,6 +118,7 @@ export default function FinalCTA() {
                     <div className="relative">
                       <input
                         id={field.id}
+                        name={field.id}
                         type={field.type}
                         placeholder={field.placeholder}
                         onFocus={() => setFocusedField(field.id)}
@@ -131,6 +147,7 @@ export default function FinalCTA() {
                   <div className="relative">
                     <textarea
                       id="message"
+                      name="message"
                       rows={3}
                       placeholder={t.contact.messagePlaceholder}
                       onFocus={() => setFocusedField('message')}
@@ -146,13 +163,17 @@ export default function FinalCTA() {
 
               <button
                 type="submit"
-                disabled={submitted}
+                disabled={status === 'sending' || status === 'submitted'}
                 className="mt-10 w-full b2g-copper-bg px-8 py-4 text-sm font-semibold tracking-wide flex items-center justify-center gap-2 b2g-focus-ring transition-transform hover:scale-[1.01] active:scale-95 disabled:opacity-60"
                 style={{ borderRadius: '2px', minHeight: '44px' }}
               >
-                {submitted ? t.contact.submitted : t.contact.submit}
-                {!submitted && <ArrowRight size={16} />}
+                {status === 'submitted' ? t.contact.submitted : status === 'sending' ? t.contact.sending : t.contact.submit}
+                {status === 'idle' && <ArrowRight size={16} />}
               </button>
+
+              {status === 'error' && (
+                <p className="mt-3 text-xs text-red-400 text-center">{t.contact.error}</p>
+              )}
 
               <p className="mt-4 text-xs text-b2g-slate/60 text-center">
                 {t.contact.consent}

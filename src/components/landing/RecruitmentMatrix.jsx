@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Users, Handshake, Briefcase, Building2, ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
+import SectionLink from '@/components/landing/SectionLink';
 
 const ICONS = {
   contractors: Building2,
@@ -71,14 +72,15 @@ export default function RecruitmentMatrix() {
                   <p className="text-sm text-b2g-slate leading-relaxed">{cat.description}</p>
                 </div>
 
-                <div
+                <SectionLink
+                  hash="#contact"
                   className={`mt-8 flex items-center gap-2 text-sm font-medium transition-all duration-500 ${
-                    isActive ? 'text-b2g-cyan' : 'text-b2g-copper opacity-0 group-hover:opacity-100'
+                    isActive ? 'text-b2g-cyan' : 'text-b2g-copper opacity-100 lg:opacity-0 lg:group-hover:opacity-100'
                   }`}
                 >
                   <span>{t.whoWeSeek.requestCall}</span>
                   <ArrowRight size={16} className={isActive ? 'translate-x-1' : ''} />
-                </div>
+                </SectionLink>
               </motion.article>
             );
           })}

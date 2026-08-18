@@ -19,6 +19,9 @@ export const TRANSLATIONS = {
       expertise: 'Expertise',
       capabilities: 'Capabilities',
       contact: 'Contact',
+      platform: 'Platform',
+      dataRoom: 'Data room',
+      pitchDeck: 'B2G Pitch Deck',
       requestConsultation: 'Request a Consultation',
     },
     hero: {
@@ -114,6 +117,8 @@ export const TRANSLATIONS = {
       submit: 'Submit Request',
       submitted: "Request Submitted — We'll be in touch",
       consent: 'By submitting, you agree to be contacted by B2G Global Services Corp.',
+      sending: 'Sending…',
+      error: 'Could not send the request. Please try again or email hello@b2g.org.',
     },
     platform: {
       badge: 'Platform Launch',
@@ -144,6 +149,12 @@ export const TRANSLATIONS = {
       copyright: 'All rights reserved.',
       tagline: 'The Global Command Interface',
     },
+    dataRoom: {
+      label: '05 — Data Room',
+      title: 'Data room',
+      subtitle: 'Company documents hosted on this site. Download any file directly.',
+      download: 'Download',
+    },
   },
 
   de: {
@@ -152,6 +163,9 @@ export const TRANSLATIONS = {
       expertise: 'Expertise',
       capabilities: 'Funktionen',
       contact: 'Kontakt',
+      platform: 'Platform',
+      dataRoom: 'Data Room',
+      pitchDeck: 'B2G Pitch Deck',
       requestConsultation: 'Beratung anfragen',
     },
     hero: {
@@ -247,6 +261,8 @@ export const TRANSLATIONS = {
       submit: 'Anfrage senden',
       submitted: 'Anfrage gesendet — Wir melden uns',
       consent: 'Mit dem Absenden stimmen Sie zu, von B2G Global Services Corp. kontaktiert zu werden.',
+      sending: 'Wird gesendet…',
+      error: 'Anfrage konnte nicht gesendet werden. Bitte erneut versuchen oder hello@b2g.org schreiben.',
     },
     platform: {
       badge: 'Plattform-Start',
@@ -277,6 +293,12 @@ export const TRANSLATIONS = {
       copyright: 'Alle Rechte vorbehalten.',
       tagline: 'Das globale Kommando-Interface',
     },
+    dataRoom: {
+      label: '05 — Data Room',
+      title: 'Data Room',
+      subtitle: 'Unternehmensdokumente auf dieser Website. Jede Datei direkt herunterladen.',
+      download: 'Herunterladen',
+    },
   },
 
   sv: {
@@ -285,6 +307,9 @@ export const TRANSLATIONS = {
       expertise: 'Expertis',
       capabilities: 'Funktioner',
       contact: 'Kontakt',
+      platform: 'Plattform',
+      dataRoom: 'Datarum',
+      pitchDeck: 'B2G Pitch Deck',
       requestConsultation: 'Begär samråd',
     },
     hero: {
@@ -380,6 +405,8 @@ export const TRANSLATIONS = {
       submit: 'Skicka förfrågan',
       submitted: 'Förfrågan skickad — Vi återkommer',
       consent: 'Genom att skicka samtycker du till att bli kontaktad av B2G Global Services Corp.',
+      sending: 'Skickar…',
+      error: 'Kunde inte skicka förfrågan. Försök igen eller mejla hello@b2g.org.',
     },
     platform: {
       badge: 'Plattformslansering',
@@ -410,6 +437,12 @@ export const TRANSLATIONS = {
       copyright: 'Alla rättigheter förbehållna.',
       tagline: 'Det globala kommandogränssnittet',
     },
+    dataRoom: {
+      label: '05 — Data Room',
+      title: 'Datarum',
+      subtitle: 'Bolagsdokument på den här sajten. Ladda ner valfri fil direkt.',
+      download: 'Ladda ner',
+    },
   },
 
   fr: {
@@ -418,6 +451,9 @@ export const TRANSLATIONS = {
       expertise: 'Expertise',
       capabilities: 'Fonctionnalités',
       contact: 'Contact',
+      platform: 'Plateforme',
+      dataRoom: 'Data room',
+      pitchDeck: 'B2G Pitch Deck',
       requestConsultation: 'Demander une consultation',
     },
     hero: {
@@ -513,6 +549,8 @@ export const TRANSLATIONS = {
       submit: 'Envoyer la demande',
       submitted: 'Demande envoyée — Nous vous contacterons',
       consent: "En soumettant, vous acceptez d'être contacté par B2G Global Services Corp.",
+      sending: 'Envoi…',
+      error: 'Impossible d’envoyer la demande. Réessayez ou écrivez à hello@b2g.org.',
     },
     platform: {
       badge: 'Lancement de la plateforme',
@@ -543,6 +581,12 @@ export const TRANSLATIONS = {
       copyright: 'Tous droits réservés.',
       tagline: "L'interface de commande globale",
     },
+    dataRoom: {
+      label: '05 — Data Room',
+      title: 'Data room',
+      subtitle: 'Documents de la société hébergés sur ce site. Téléchargez chaque fichier directement.',
+      download: 'Télécharger',
+    },
   },
 
   es: {
@@ -551,6 +595,9 @@ export const TRANSLATIONS = {
       expertise: 'Experiencia',
       capabilities: 'Funciones',
       contact: 'Contacto',
+      platform: 'Plataforma',
+      dataRoom: 'Data room',
+      pitchDeck: 'B2G Pitch Deck',
       requestConsultation: 'Solicitar consulta',
     },
     hero: {
@@ -646,6 +693,8 @@ export const TRANSLATIONS = {
       submit: 'Enviar solicitud',
       submitted: 'Solicitud enviada — Nos pondremos en contacto',
       consent: 'Al enviar, acepta ser contactado por B2G Global Services Corp.',
+      sending: 'Enviando…',
+      error: 'No se pudo enviar la solicitud. Inténtelo de nuevo o escriba a hello@b2g.org.',
     },
     platform: {
       badge: 'Lanzamiento de la plataforma',
@@ -676,6 +725,12 @@ export const TRANSLATIONS = {
       copyright: 'Todos los derechos reservados.',
       tagline: 'La interfaz de mando global',
     },
+    dataRoom: {
+      label: '05 — Data Room',
+      title: 'Data room',
+      subtitle: 'Documentos de la compañía alojados en este sitio. Descargue cualquier archivo directamente.',
+      download: 'Descargar',
+    },
   },
 
   it: {
@@ -684,6 +739,9 @@ export const TRANSLATIONS = {
       expertise: 'Competenza',
       capabilities: 'Funzioni',
       contact: 'Contatto',
+      platform: 'Piattaforma',
+      dataRoom: 'Data room',
+      pitchDeck: 'B2G Pitch Deck',
       requestConsultation: 'Richiedi consulenza',
     },
     hero: {
@@ -779,6 +837,8 @@ export const TRANSLATIONS = {
       submit: 'Invia richiesta',
       submitted: 'Richiesta inviata — Ti contatteremo',
       consent: 'Inviando, accetti di essere contattato da B2G Global Services Corp.',
+      sending: 'Invio…',
+      error: 'Impossibile inviare la richiesta. Riprova o scrivi a hello@b2g.org.',
     },
     platform: {
       badge: 'Lancio della piattaforma',
@@ -809,6 +869,12 @@ export const TRANSLATIONS = {
       copyright: 'Tutti i diritti riservati.',
       tagline: "L'interfaccia di comando globale",
     },
+    dataRoom: {
+      label: '05 — Data Room',
+      title: 'Data room',
+      subtitle: 'Documenti aziendali ospitati su questo sito. Scarica ogni file direttamente.',
+      download: 'Scarica',
+    },
   },
 
   ru: {
@@ -817,6 +883,9 @@ export const TRANSLATIONS = {
       expertise: 'Экспертиза',
       capabilities: 'Возможности',
       contact: 'Контакты',
+      platform: 'Платформа',
+      dataRoom: 'Data room',
+      pitchDeck: 'B2G Pitch Deck',
       requestConsultation: 'Запросить консультацию',
     },
     hero: {
@@ -912,6 +981,8 @@ export const TRANSLATIONS = {
       submit: 'Отправить заявку',
       submitted: 'Заявка отправлена — Мы свяжемся с вами',
       consent: 'Отправляя форму, вы соглашаетесь на связь с B2G Global Services Corp.',
+      sending: 'Отправка…',
+      error: 'Не удалось отправить заявку. Попробуйте ещё раз или напишите на hello@b2g.org.',
     },
     platform: {
       badge: 'Запуск платформы',
@@ -941,6 +1012,12 @@ export const TRANSLATIONS = {
       careerOpportunities: 'Карьерные возможности',
       copyright: 'Все права защищены.',
       tagline: 'Глобальный командный интерфейс',
+    },
+    dataRoom: {
+      label: '05 — Data Room',
+      title: 'Data room',
+      subtitle: 'Документы компании на этом сайте. Скачайте любой файл напрямую.',
+      download: 'Скачать',
     },
   },
 };
