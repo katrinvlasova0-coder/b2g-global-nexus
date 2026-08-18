@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://katrinvlasova0-coder.github.io/b2g-global-nexus/</loc>
+    <loc>https://b2g.org/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://katrinvlasova0-coder.github.io/b2g-global-nexus/platform</loc>
+    <loc>https://b2g.org/platform</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://katrinvlasova0-coder.github.io/b2g-global-nexus/data-room</loc>
+    <loc>https://b2g.org/data-room</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

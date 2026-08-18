@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://katrinvlasova0-coder.github.io/b2g-global-nexus/sitemap.xml
+Sitemap: https://b2g.org/sitemap.xml

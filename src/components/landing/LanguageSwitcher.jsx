@@ -13,8 +13,8 @@ export default function LanguageSwitcher() {
     const onClick = (e) => {
       if (ref.current && !ref.current.contains(e.target)) setOpen(false);
     };
-    document.addEventListener('mousedown', onClick);
-    return () => document.removeEventListener('mousedown', onClick);
+    document.addEventListener('pointerdown', onClick);
+    return () => document.removeEventListener('pointerdown', onClick);
   }, []);
 
   return (
@@ -27,7 +27,7 @@ export default function LanguageSwitcher() {
         aria-expanded={open}
       >
         <Globe size={16} className="b2g-copper" />
-        <span className="hidden sm:inline">{current.short}</span>
+        <span>{current.short}</span>
         <ChevronDown size={14} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
 

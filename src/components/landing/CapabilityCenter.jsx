@@ -137,7 +137,7 @@ export default function CapabilityCenter() {
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerLeave={endDrag}
-        className="b2g-hscroll lg:overflow-x-auto overflow-visible lg:cursor-grab select-none"
+        className="b2g-hscroll overflow-x-auto lg:cursor-grab select-none"
       >
         <div className="flex flex-col lg:flex-row gap-px lg:pl-6 lg:pl-10 lg:pr-10">
           {CAPABILITIES.map((cap, i) => {

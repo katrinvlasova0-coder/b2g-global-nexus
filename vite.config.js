@@ -19,7 +19,7 @@ function githubPagesSpa() {
 
 export default defineConfig(({ command, isPreview }) => {
   const isDev = command === 'serve' && !isPreview
-  const pagesBase = process.env.VITE_BASE ?? (isDev ? '/' : '/b2g-global-nexus/')
+  const pagesBase = process.env.VITE_BASE ?? '/'
 
   return {
     base: pagesBase,

@@ -30,7 +30,7 @@ export default function Navbar() {
       <nav className="max-w-[1400px] mx-auto px-6 lg:px-10 h-16 flex items-center justify-between">
         <SectionLink hash="#top" className="flex items-center group" aria-label="B2G Global Services Corp — home">
           <span className="w-px h-6 lg:h-9 bg-b2g-copper mr-px shrink-0" />
-          <Logo className="h-9 lg:h-14" />
+          <Logo className="h-9 lg:h-14 max-w-[46vw] object-contain object-left" />
         </SectionLink>
 
         <div className="hidden lg:flex items-center gap-9">

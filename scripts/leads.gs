@@ -9,13 +9,27 @@
  * 4. Put the web app URL in .env.local as VITE_LEADS_WEBHOOK_URL
  *    and in GitHub → Settings → Secrets as VITE_LEADS_WEBHOOK_URL.
  */
+const HEADERS = [
+  'Timestamp',
+  'Name',
+  'Email',
+  'Country',
+  'Role',
+  'Message',
+  'Language',
+  'Language name',
+  'Page',
+  'Source',
+  'Site',
+  'Device',
+  'Form',
+];
+
 function doPost(e) {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Leads')
     || SpreadsheetApp.getActiveSpreadsheet().insertSheet('Leads');
 
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow(['Timestamp', 'Name', 'Email', 'Country', 'Role', 'Message', 'Language', 'Page']);
-  }
+  sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
 
   const data = e.parameter || {};
   sheet.appendRow([
@@ -26,7 +40,12 @@ function doPost(e) {
     data.role || '',
     data.message || '',
     data.language || '',
+    data.languageName || '',
     data.page || '',
+    data.source || 'website',
+    data.site || '',
+    data.device || '',
+    data.form || 'contact',
   ]);
 
   return ContentService

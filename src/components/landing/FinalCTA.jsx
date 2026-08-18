@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
-import { buildLeadPayload, submitLead } from '@/lib/leads';
+import { buildLeadPayload, detectDevice, submitLead } from '@/lib/leads';
 
 export default function FinalCTA() {
   const { t, lang } = useLanguage();
@@ -16,6 +16,10 @@ export default function FinalCTA() {
     const payload = buildLeadPayload(fields, {
       language: lang,
       page: window.location.href,
+      source: 'website-contact',
+      site: window.location.hostname,
+      device: detectDevice(navigator.userAgent, window.innerWidth),
+      form: 'contact',
     });
 
     setStatus('sending');
