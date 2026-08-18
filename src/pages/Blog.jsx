@@ -3,6 +3,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '@/components/landing/Navbar';
 import Footer from '@/components/landing/Footer';
 import SeoHead from '@/components/blog/SeoHead';
+import BlogHeroBand from '@/components/blog/BlogHeroBand';
+import BackToTop from '@/components/blog/BackToTop';
 import { BLOG_CATEGORIES, getAllPosts, getPostsByCategory } from '@/lib/blog';
 import { canonicalBlogIndexUrl } from '@/lib/blog-seo';
 import { useLanguage } from '@/lib/LanguageContext';
@@ -34,10 +36,9 @@ export default function Blog() {
       />
       <Navbar />
       <main className="pt-16">
-        <section className="b2g-blog relative py-16 lg:py-24">
+        <BlogHeroBand kicker={copy.label} title={copy.title} />
+        <section className="b2g-blog relative py-12 lg:py-16">
           <div className="max-w-[1100px] mx-auto px-6 lg:px-10">
-            <span className="b2g-label block mb-6">{copy.label}</span>
-            <h1 className="b2g-h text-b2g-obsidian text-4xl lg:text-6xl leading-[1.05] mb-6">{copy.title}</h1>
             <p className="text-lg text-neutral-600 max-w-2xl leading-relaxed">{copy.subtitle}</p>
 
             <div className="mt-10 flex flex-wrap gap-2">
@@ -65,21 +66,32 @@ export default function Blog() {
             {posts.length === 0 ? (
               <p className="mt-16 text-neutral-600">{copy.empty}</p>
             ) : (
-              <ul className="mt-16 space-y-6">
+              <ul className="mt-12 space-y-6">
                 {posts.map((post) => (
                   <li key={post.slug}>
                     <Link
                       to={`/blog/${post.slug}`}
-                      className="block p-6 border border-black/10 hover:border-b2g-copper/60 transition-colors b2g-focus-ring bg-white"
+                      className="flex flex-col md:flex-row overflow-hidden border border-black/10 hover:border-b2g-copper/60 transition-colors b2g-focus-ring bg-white"
                       style={{ borderRadius: '2px' }}
                     >
-                      <p className="b2g-label mb-3">{post.category}</p>
-                      <h2 className="b2g-h text-b2g-obsidian text-2xl mb-3">{post.title}</h2>
-                      <p className="text-neutral-600 text-sm leading-relaxed">{post.description}</p>
-                      <p className="mt-4 text-xs text-neutral-500">
-                        {post.datePublished}
-                        {post.readTime ? ` · ${post.readTime}` : ''}
-                      </p>
+                      <div className="relative w-full md:w-80 h-48 md:self-stretch md:min-h-[12rem] shrink-0 overflow-hidden bg-b2g-obsidian">
+                        {post.coverImage ? (
+                          <img
+                            src={post.coverImage}
+                            alt=""
+                            className="absolute inset-0 h-full w-full object-cover"
+                          />
+                        ) : null}
+                      </div>
+                      <div className="p-6 flex flex-col justify-center">
+                        <p className="b2g-label mb-3">{post.category}</p>
+                        <h2 className="b2g-h text-b2g-obsidian text-2xl mb-3">{post.title}</h2>
+                        <p className="text-neutral-600 text-sm leading-relaxed">{post.description}</p>
+                        <p className="mt-4 text-xs text-neutral-500">
+                          {post.datePublished}
+                          {post.readTime ? ` · ${post.readTime}` : ''}
+                        </p>
+                      </div>
                     </Link>
                   </li>
                 ))}
@@ -88,6 +100,7 @@ export default function Blog() {
           </div>
         </section>
       </main>
+      <BackToTop />
       <Footer />
     </div>
   );

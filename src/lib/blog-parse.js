@@ -134,3 +134,22 @@ export function filterPostsByCategory(posts, category) {
   if (!category || !BLOG_CATEGORIES.includes(category)) return posts;
   return posts.filter((post) => post.category === category);
 }
+
+export function getRelatedPosts(posts, slug, limit = 3) {
+  const list = Array.isArray(posts) ? posts : [];
+  const current = list.find((post) => post.slug === slug);
+  const others = list.filter((post) => post.slug !== slug);
+  const sameCategory = current
+    ? others.filter((post) => post.category === current.category)
+    : [];
+  const rest = current ? others.filter((post) => post.category !== current.category) : others;
+  return [...sameCategory, ...rest].slice(0, limit);
+}
+
+export function splitBodyForBanner(body) {
+  const text = String(body ?? '');
+  const matches = [...text.matchAll(/^## /gm)];
+  if (matches.length < 2) return { before: text, after: '' };
+  const index = matches[1].index ?? 0;
+  return { before: text.slice(0, index).trim(), after: text.slice(index).trim() };
+}

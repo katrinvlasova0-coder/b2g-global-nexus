@@ -3,31 +3,71 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 <url>
   <loc>https://b2g.org/</loc>
-  <lastmod>2026-08-18</lastmod>
+  <lastmod>2026-08-23</lastmod>
   <changefreq>weekly</changefreq>
-  <priority>1</priority>
+  <priority>1.0</priority>
   <xhtml:link rel="alternate" hreflang="en" href="https://b2g.org/"/>
   <xhtml:link rel="alternate" hreflang="x-default" href="https://b2g.org/"/>
 </url>
 <url>
   <loc>https://b2g.org/blog/</loc>
-  <lastmod>2026-08-18</lastmod>
+  <lastmod>2026-08-23</lastmod>
   <changefreq>daily</changefreq>
   <priority>0.8</priority>
   <xhtml:link rel="alternate" hreflang="en" href="https://b2g.org/blog/"/>
   <xhtml:link rel="alternate" hreflang="x-default" href="https://b2g.org/blog/"/>
 </url>
 <url>
+  <loc>https://b2g.org/blog/fallback-bid-file-map-2026-08-20/</loc>
+  <lastmod>2026-08-23</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.7</priority>
+  <xhtml:link rel="alternate" hreflang="en" href="https://b2g.org/blog/fallback-bid-file-map-2026-08-20/"/>
+  <xhtml:link rel="alternate" hreflang="x-default" href="https://b2g.org/blog/fallback-bid-file-map-2026-08-20/"/>
+</url>
+<url>
   <loc>https://b2g.org/blog/fallback-bid-security-basics-2026-08-18/</loc>
-  <lastmod>2026-08-18</lastmod>
+  <lastmod>2026-08-23</lastmod>
   <changefreq>monthly</changefreq>
   <priority>0.7</priority>
   <xhtml:link rel="alternate" hreflang="en" href="https://b2g.org/blog/fallback-bid-security-basics-2026-08-18/"/>
   <xhtml:link rel="alternate" hreflang="x-default" href="https://b2g.org/blog/fallback-bid-security-basics-2026-08-18/"/>
 </url>
 <url>
+  <loc>https://b2g.org/blog/fallback-e-procurement-portals-2026-08-22/</loc>
+  <lastmod>2026-08-23</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.7</priority>
+  <xhtml:link rel="alternate" hreflang="en" href="https://b2g.org/blog/fallback-e-procurement-portals-2026-08-22/"/>
+  <xhtml:link rel="alternate" hreflang="x-default" href="https://b2g.org/blog/fallback-e-procurement-portals-2026-08-22/"/>
+</url>
+<url>
+  <loc>https://b2g.org/blog/fallback-eligibility-evidence-2026-08-21/</loc>
+  <lastmod>2026-08-23</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.7</priority>
+  <xhtml:link rel="alternate" hreflang="en" href="https://b2g.org/blog/fallback-eligibility-evidence-2026-08-21/"/>
+  <xhtml:link rel="alternate" hreflang="x-default" href="https://b2g.org/blog/fallback-eligibility-evidence-2026-08-21/"/>
+</url>
+<url>
+  <loc>https://b2g.org/blog/fallback-named-subcontractors-2026-08-23/</loc>
+  <lastmod>2026-08-23</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.7</priority>
+  <xhtml:link rel="alternate" hreflang="en" href="https://b2g.org/blog/fallback-named-subcontractors-2026-08-23/"/>
+  <xhtml:link rel="alternate" hreflang="x-default" href="https://b2g.org/blog/fallback-named-subcontractors-2026-08-23/"/>
+</url>
+<url>
+  <loc>https://b2g.org/blog/fallback-read-tender-notice-2026-08-19/</loc>
+  <lastmod>2026-08-23</lastmod>
+  <changefreq>monthly</changefreq>
+  <priority>0.7</priority>
+  <xhtml:link rel="alternate" hreflang="en" href="https://b2g.org/blog/fallback-read-tender-notice-2026-08-19/"/>
+  <xhtml:link rel="alternate" hreflang="x-default" href="https://b2g.org/blog/fallback-read-tender-notice-2026-08-19/"/>
+</url>
+<url>
   <loc>https://b2g.org/platform/</loc>
-  <lastmod>2026-08-18</lastmod>
+  <lastmod>2026-08-23</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.6</priority>
   <xhtml:link rel="alternate" hreflang="en" href="https://b2g.org/platform/"/>
@@ -35,7 +75,7 @@
 </url>
 <url>
   <loc>https://b2g.org/data-room/</loc>
-  <lastmod>2026-08-18</lastmod>
+  <lastmod>2026-08-23</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>
   <xhtml:link rel="alternate" hreflang="en" href="https://b2g.org/data-room/"/>

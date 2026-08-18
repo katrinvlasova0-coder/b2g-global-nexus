@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BLOG_CATEGORIES, cleanBlogBody, parseBlogMdx } from './blog-parse.js';
+import { BLOG_CATEGORIES, cleanBlogBody, getRelatedPosts, parseBlogMdx, splitBodyForBanner } from './blog-parse.js';
 
 const FIXTURE = `---
 title: "How to read a tender notice: fields, lots and deadlines"
@@ -108,4 +108,24 @@ ${MESSY_BODY}`,
   assert.doesNotMatch(post.body, /educational snapshot/);
   assert.doesNotMatch(post.body, /photo-1554224155-6726b3ff858f/);
   assert.match(post.body, /## Bid security versus performance security/);
+});
+
+test('getRelatedPosts prefers the same category and skips the current slug', () => {
+  const related = getRelatedPosts(
+    [
+      { slug: 'a', category: 'Tenders', title: 'A' },
+      { slug: 'b', category: 'Tenders', title: 'B' },
+      { slug: 'c', category: 'Financing', title: 'C' },
+    ],
+    'a',
+    2,
+  );
+  assert.deepEqual(related.map((post) => post.slug), ['b', 'c']);
+});
+
+test('splitBodyForBanner inserts after the first section', () => {
+  const split = splitBodyForBanner('Intro.\n\n## One\n\nAlpha.\n\n## Two\n\nBeta.');
+  assert.match(split.before, /## One/);
+  assert.doesNotMatch(split.before, /## Two/);
+  assert.match(split.after, /## Two/);
 });

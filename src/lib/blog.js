@@ -26,4 +26,4 @@ export function getPostsByCategory(category) {
   return filterPostsByCategory(getAllPosts(), category);
 }
 
-export { BLOG_CATEGORIES, cleanBlogBody, parseBlogMdx, sortPosts, filterPostsByCategory } from './blog-parse.js';
+export { BLOG_CATEGORIES, cleanBlogBody, parseBlogMdx, sortPosts, filterPostsByCategory, getRelatedPosts, splitBodyForBanner } from './blog-parse.js';
