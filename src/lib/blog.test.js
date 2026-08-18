@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BLOG_CATEGORIES, parseBlogMdx } from './blog-parse.js';
+import { BLOG_CATEGORIES, cleanBlogBody, parseBlogMdx } from './blog-parse.js';
 
 const FIXTURE = `---
 title: "How to read a tender notice: fields, lots and deadlines"
@@ -50,4 +50,62 @@ test('parseBlogMdx reads frontmatter, FAQ list and body', () => {
 
 test('BLOG_CATEGORIES match the landing capability clusters', () => {
   assert.deepEqual(BLOG_CATEGORIES, ['Tenders', 'Documentation', 'Financing', 'Contractors']);
+});
+
+const MESSY_BODY = `bid bonds is an educational topic, not a promise of a contract award. As-of date for this briefing: 2026-08-18. This text explains terms.
+
+![bid bonds — Public procurement documents](https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80&auto=format&fit=crop)
+
+## Bid security versus performance security
+
+Anyone mapping bid bonds should start with the legal source.
+
+![charts](https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800)
+
+## Further reading
+
+- [How to find public tenders worldwide](/blog/how-to-find-public-tenders-worldwide/)
+- [How to read a tender notice](/blog/how-to-read-a-tender-notice/)
+
+This educational snapshot of “Bid bonds and tender guarantees: amount, wording, release” is for 2026-08-18 and is not standing legal advice. Anyone acting should check the primary source from the competent body as of the action date and file a copy. Where this overview and the official text differ, the official text prevails. A later version replaces this note only if date and source are documented again.
+
+Leave your contacts for a consultation on tender selection and documentation preparation.
+
+*This material is for informational and educational purposes only.*
+`;
+
+test('cleanBlogBody drops factory lead, cover duplicate, further reading and snapshot', () => {
+  const cleaned = cleanBlogBody(
+    MESSY_BODY,
+    'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80&auto=format&fit=crop',
+  );
+
+  assert.doesNotMatch(cleaned, /educational topic, not a promise/);
+  assert.doesNotMatch(cleaned, /photo-1554224155-6726b3ff858f/);
+  assert.doesNotMatch(cleaned, /Further reading/);
+  assert.doesNotMatch(cleaned, /How to find public tenders worldwide/);
+  assert.doesNotMatch(cleaned, /educational snapshot/);
+  assert.match(cleaned, /## Bid security versus performance security/);
+  assert.match(cleaned, /Anyone mapping bid bonds/);
+  assert.match(cleaned, /photo-1460925895917-afdab827c52f/);
+  assert.match(cleaned, /Leave your contacts for a consultation/);
+  assert.match(cleaned, /educational purposes only/);
+});
+
+test('parseBlogMdx applies body cleanup using the cover image', () => {
+  const post = parseBlogMdx(
+    'fallback-bid-security-basics-2026-08-18',
+    `---
+title: "Bid bonds"
+coverImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&q=80&auto=format&fit=crop"
+category: "Financing"
+---
+
+${MESSY_BODY}`,
+  );
+
+  assert.doesNotMatch(post.body, /Further reading/);
+  assert.doesNotMatch(post.body, /educational snapshot/);
+  assert.doesNotMatch(post.body, /photo-1554224155-6726b3ff858f/);
+  assert.match(post.body, /## Bid security versus performance security/);
 });

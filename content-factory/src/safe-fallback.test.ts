@@ -51,6 +51,22 @@ for (const template of SAFE_TEMPLATES) {
     result.stats.wordCountDe >= 1500,
     `${slug} word count ${result.stats.wordCountDe} < 1500`,
   );
+  assert(!content.includes('## Further reading'), `${slug} still has Further reading`);
+  assert(!content.includes('educational snapshot'), `${slug} still has snapshot dump`);
+  assert(
+    !/is an educational topic, not a promise of a contract award/.test(content),
+    `${slug} still has factory lead paragraph`,
+  );
+
+  const body = content.split(/^---$/m).slice(2).join('---');
+  const coverMatch = content.match(/^coverImage:\s+"?([^"\n]+)"?/m);
+  const coverUrl = coverMatch?.[1]?.trim() ?? '';
+  const coverPath = coverUrl.split('?')[0];
+  const bodyImages = [...body.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)].map((m) => m[1]);
+  assert(
+    !bodyImages.some((url) => url.split('?')[0] === coverPath),
+    `${slug} repeats cover image in the body`,
+  );
 }
 
 console.log('✅ safe-fallback.test.ts passed');

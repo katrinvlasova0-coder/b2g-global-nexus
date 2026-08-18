@@ -6,14 +6,14 @@ const modules = import.meta.glob('../../content/blog/*.mdx', {
   import: 'default',
 });
 
-function slugFromPath(filePath) {
+function fileSlug(filePath) {
   const file = String(filePath).split('/').pop() || '';
   return file.replace(/\.mdx$/, '');
 }
 
 export function getAllPosts() {
   const posts = Object.entries(modules).map(([filePath, raw]) =>
-    parseBlogMdx(slugFromPath(filePath), raw),
+    parseBlogMdx(fileSlug(filePath), raw),
   );
   return sortPosts(posts);
 }
@@ -26,4 +26,4 @@ export function getPostsByCategory(category) {
   return filterPostsByCategory(getAllPosts(), category);
 }
 
-export { BLOG_CATEGORIES, parseBlogMdx, sortPosts, filterPostsByCategory } from './blog-parse.js';
+export { BLOG_CATEGORIES, cleanBlogBody, parseBlogMdx, sortPosts, filterPostsByCategory } from './blog-parse.js';

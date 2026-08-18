@@ -10,6 +10,7 @@ export default function LeadForm({
   page,
   className = '',
   messagePlaceholder,
+  tone = 'dark',
 }) {
   const { t, lang } = useLanguage();
   const [focusedField, setFocusedField] = useState(null);
@@ -48,6 +49,12 @@ export default function LeadForm({
     { id: 'role', label: t.contact.fields.role, type: 'text', placeholder: t.contact.fields.rolePlaceholder },
   ];
 
+  const light = tone === 'light';
+  const idleBorder = light ? 'rgba(11, 18, 42, 0.18)' : 'rgba(0, 102, 255, 0.2)';
+  const inputClass = light
+    ? 'text-b2g-obsidian placeholder:text-neutral-400'
+    : 'text-b2g-white placeholder:text-b2g-slate/40';
+
   return (
     <motion.form
       onSubmit={handleSubmit}
@@ -55,8 +62,8 @@ export default function LeadForm({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className={`p-6 sm:p-8 lg:p-10 border border-b2g-copper/15 ${className}`}
-      style={{ borderRadius: '2px', backgroundColor: '#050530' }}
+      className={`p-6 sm:p-8 lg:p-10 border ${light ? 'border-black/10' : 'border-b2g-copper/15'} ${className}`}
+      style={{ borderRadius: '2px', backgroundColor: light ? '#f4f6fb' : '#050530' }}
     >
       <p className="b2g-label mb-8">{t.contact.gateway}</p>
 
@@ -74,9 +81,9 @@ export default function LeadForm({
                 placeholder={field.placeholder}
                 onFocus={() => setFocusedField(field.id)}
                 onBlur={() => setFocusedField(null)}
-                className="w-full bg-transparent border-0 border-b text-b2g-white placeholder:text-b2g-slate/40 py-3 text-base b2g-focus-ring transition-colors"
+                className={`w-full bg-transparent border-0 border-b py-3 text-base b2g-focus-ring transition-colors ${inputClass}`}
                 style={{
-                  borderBottomColor: focusedField === field.id ? '#00ff9d' : 'rgba(0, 102, 255, 0.2)',
+                  borderBottomColor: focusedField === field.id ? '#00ff9d' : idleBorder,
                 }}
                 required
               />
@@ -95,15 +102,15 @@ export default function LeadForm({
             placeholder={messagePlaceholder || t.contact.messagePlaceholder}
             onFocus={() => setFocusedField('message')}
             onBlur={() => setFocusedField(null)}
-            className="w-full bg-transparent border-0 border-b text-b2g-white placeholder:text-b2g-slate/40 py-3 text-base b2g-focus-ring transition-colors resize-none"
+            className={`w-full bg-transparent border-0 border-b py-3 text-base b2g-focus-ring transition-colors resize-none ${inputClass}`}
             style={{
-              borderBottomColor: focusedField === 'message' ? '#00ff9d' : 'rgba(0, 102, 255, 0.2)',
+              borderBottomColor: focusedField === 'message' ? '#00ff9d' : idleBorder,
             }}
           />
         </div>
       </div>
 
-      <label className="mt-8 flex items-start gap-3 text-xs text-b2g-slate/80 leading-relaxed cursor-pointer">
+      <label className={`mt-8 flex items-start gap-3 text-xs leading-relaxed cursor-pointer ${light ? 'text-neutral-600' : 'text-b2g-slate/80'}`}>
         <input
           type="checkbox"
           name="consent"

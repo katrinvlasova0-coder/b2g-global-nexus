@@ -1,6 +1,5 @@
 import type { ArticleRequest } from './prompts/types';
 import { clusterTagEn } from '../config/cluster-tags';
-import { getInternalLinks } from './queue';
 import type { UnsplashImage } from './images';
 
 const DEPTH = [
@@ -47,18 +46,12 @@ function faqItems(req: ArticleRequest): Array<{ q: string; a: string }> {
 }
 
 export function generateMockArticle(req: ArticleRequest, images: UnsplashImage[]): string {
-  const author = req.author ?? { name: 'B2G Educational', role: 'Editorial' };
   const cover = images[0]?.url.replace('w=800', 'w=1200') ?? images[0]?.url ?? '';
   const kw = req.keywordEn || req.keywordDe;
   const title = req.titleEn || req.titleDe;
-  const img1 = images[0];
   const img2 = images[1] ?? images[0];
-  const img3 = images[2] ?? images[0];
   const faqs = faqItems(req);
   const faqYaml = faqs.map((f) => `  - question: "${f.q}"\n    answer: "${f.a}"`).join('\n');
-  const internalLinks = getInternalLinks(req.slug, 3)
-    .map((l) => `- [${l.text}](/blog/${l.slug}/)`)
-    .join('\n');
 
   return `---
 title: "${title}"
@@ -69,7 +62,7 @@ datePublished: "${req.plannedDate}"
 dateModified: "${req.plannedDate}"
 author:
   name: "B2G Editorial"
-  role: "${author.role}"
+  role: "Editorial"
 category: "${req.category}"
 readTime: "8 min"
 coverImage: "${cover}"
@@ -86,8 +79,6 @@ ${faqYaml}
 - Primary source: the published notice and tender documents
 - Typical split: eligibility, technical file, financial file, bonds
 - B2G is a private company, not a government agency
-
-![${img1.altText} — ${kw}](${img1.url})
 
 ## What ${kw} means in a live procedure
 
@@ -119,12 +110,6 @@ ${DEPTH.join('\n\n')}
 There is no guaranteed win. Win rates vary by market and evaluator weighting; nobody should publish a personalised percentage as a promise. Financing instruments are not guaranteed financing. B2G Global Services Corp. is not a government agency and does not replace the official portal.
 
 Sources: [TED](https://ted.europa.eu), [OECD procurement](https://www.oecd.org/governance/procurement/), [UNCITRAL](https://uncitral.un.org).
-
-## Further reading
-
-${internalLinks || '- [How to find public tenders worldwide](/blog/how-to-find-public-tenders-worldwide/)\n- [How to prepare tender documentation](/blog/how-to-prepare-tender-documentation/)'}
-
-![${img3.altText} — documentation review](${img3.url})
 
 ## Conclusion
 

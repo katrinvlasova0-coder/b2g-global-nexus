@@ -26,7 +26,7 @@ export default defineConfig(({ command, isPreview }) => {
     base: pagesBase,
     server: {
       watch: {
-        ignored: ['**/content-factory/**', '**/content/blog/**'],
+        ignored: ['**/content-factory/**'],
       },
     },
     plugins: [

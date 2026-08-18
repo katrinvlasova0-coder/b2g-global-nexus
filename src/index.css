@@ -200,6 +200,11 @@
     -webkit-text-fill-color: transparent;
     color: transparent;
   }
+
+  .b2g-blog {
+    background-color: #ffffff;
+    color: #1a2035;
+  }
 }
 
 /* Data-flow line animation */

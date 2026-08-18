@@ -7,7 +7,8 @@ export function buildArticlePrompt(
   internalLinks: Array<{ slug: string; text: string }>,
 ): string {
   const imgMarkdown = images
-    .map((img, i) => `Image ${i + 1}: ![${img.altText}](${img.url})`)
+    .slice(1)
+    .map((img, i) => `Body image ${i + 1}: ![${img.altText}](${img.url})`)
     .join('\n');
 
   const internalLinksText = internalLinks
@@ -33,11 +34,15 @@ Write a complete English educational article for the B2G Global blog (public pro
 - **Category:** ${req.category} (one of: Tenders, Documentation, Financing, Contractors)
 - **Audience:** ${getSegmentDesc(req.taSegments)}
 
-## IMAGES (place in the article at sensible points)
-${imgMarkdown}
+## IMAGES
+- Do **not** paste the cover image (`coverImage` in frontmatter) into the body. The site already renders it above the article.
+- Place remaining images later in the body, after at least one H2.
+${imgMarkdown || '- (no extra body images)'}
 
-## INTERNAL LINKS (embed 3–5 naturally)
-${internalLinksText}
+## INTERNAL LINKS
+Embed 2–3 as inline mentions only if they fit. **Do not** add a “Further reading” heading or a dump of unpublished slugs.
+
+${internalLinksText || '(none — skip internal links)'}
 
 ## AUTHORITATIVE EXTERNAL SOURCES (use where relevant)
 - TED / EU Tenders Electronic Daily: https://ted.europa.eu
@@ -73,18 +78,19 @@ faq:
 \`\`\`
 
 ### 2. Article structure (required)
-- Intro: hook + core answer in the first 150 words (GEO)
-- Image 1 right after the intro
+- Intro: hook + core answer in the first 150 words (GEO). Start with the topic, not a compliance dump.
+- Do **not** repeat the cover image in the body
 - At least 5 H2 headings
 - At least 1 data table
 - At least 1 numbered list (5+ items)
-- Image 2 mid-article
+- One in-body image (not the cover) mid-article
 - Risks / limits section (required) — no guaranteed win, no guaranteed financing
 - Practical checklist or how-to
 - Closing CTA, verbatim:
   Leave your contacts for a consultation on tender selection and documentation preparation.
-- Required disclaimer (see system prompt)
-- Image 3 optional
+- Required italic disclaimer (see system prompt)
+- **Do not** add a “Further reading” section
+- **Do not** add a paragraph beginning “This educational snapshot of …”
 
 ### 3. FAQ
 At least 5 questions in frontmatter. First question must be the most common search query for "${keyword}".

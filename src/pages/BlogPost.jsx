@@ -33,14 +33,14 @@ export default function BlogPost() {
       />
       <Navbar />
       <main className="pt-16">
-        <article className="relative py-16 lg:py-24" style={{ backgroundColor: '#00001a' }}>
+        <article className="b2g-blog relative py-16 lg:py-24">
           <div className="max-w-[760px] mx-auto px-6 lg:px-10">
-            <Link to="/blog" className="b2g-label b2g-link-underline inline-block mb-8 text-b2g-cyan">
+            <Link to="/blog" className="b2g-label b2g-link-underline inline-block mb-8 text-b2g-copper">
               {copy.back}
             </Link>
             <p className="b2g-label mb-4">{post.category}</p>
-            <h1 className="b2g-h text-b2g-white text-4xl lg:text-5xl leading-[1.1] mb-6">{post.title}</h1>
-            <p className="text-sm text-b2g-slate/80 mb-10">
+            <h1 className="b2g-h text-b2g-obsidian text-4xl lg:text-5xl leading-[1.1] mb-6">{post.title}</h1>
+            <p className="text-sm text-neutral-500 mb-10">
               {post.author.name}
               {post.datePublished ? ` · ${post.datePublished}` : ''}
               {post.readTime ? ` · ${post.readTime}` : ''}
@@ -49,31 +49,31 @@ export default function BlogPost() {
               <img
                 src={post.coverImage}
                 alt=""
-                className="w-full mb-12 border border-b2g-copper/15"
+                className="w-full mb-12 border border-black/10"
                 style={{ borderRadius: '2px' }}
               />
             ) : null}
 
-            <div className="b2g-prose text-b2g-slate leading-relaxed">
+            <div className="b2g-prose text-[#1a2035] leading-relaxed">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
                   h2: ({ children }) => (
-                    <h2 className="b2g-h text-b2g-white text-2xl mt-12 mb-4">{children}</h2>
+                    <h2 className="b2g-h text-b2g-obsidian text-2xl mt-12 mb-4">{children}</h2>
                   ),
                   h3: ({ children }) => (
-                    <h3 className="b2g-h text-b2g-white text-xl mt-8 mb-3">{children}</h3>
+                    <h3 className="b2g-h text-b2g-obsidian text-xl mt-8 mb-3">{children}</h3>
                   ),
                   p: ({ children }) => <p className="mb-5 text-base">{children}</p>,
                   ul: ({ children }) => <ul className="mb-5 list-disc pl-5 space-y-2">{children}</ul>,
                   ol: ({ children }) => <ol className="mb-5 list-decimal pl-5 space-y-2">{children}</ol>,
                   a: ({ href, children }) => (
-                    <a href={href} className="text-b2g-cyan b2g-link-underline">
+                    <a href={href} className="text-b2g-copper b2g-link-underline">
                       {children}
                     </a>
                   ),
                   img: ({ src, alt }) => (
-                    <img src={src} alt={alt || ''} className="my-8 w-full border border-b2g-copper/15" style={{ borderRadius: '2px' }} />
+                    <img src={src} alt={alt || ''} className="my-8 w-full border border-black/10" style={{ borderRadius: '2px' }} />
                   ),
                   table: ({ children }) => (
                     <div className="my-8 overflow-x-auto">
@@ -81,10 +81,10 @@ export default function BlogPost() {
                     </div>
                   ),
                   th: ({ children }) => (
-                    <th className="border border-b2g-copper/20 px-3 py-2 text-left text-b2g-white">{children}</th>
+                    <th className="border border-black/15 px-3 py-2 text-left text-b2g-obsidian">{children}</th>
                   ),
                   td: ({ children }) => (
-                    <td className="border border-b2g-copper/20 px-3 py-2">{children}</td>
+                    <td className="border border-black/15 px-3 py-2">{children}</td>
                   ),
                 }}
               >
@@ -94,22 +94,23 @@ export default function BlogPost() {
 
             {post.faq.length > 0 ? (
               <section className="mt-16">
-                <h2 className="b2g-h text-b2g-white text-2xl mb-6">{copy.faq}</h2>
+                <h2 className="b2g-h text-b2g-obsidian text-2xl mb-6">{copy.faq}</h2>
                 <dl className="space-y-6">
                   {post.faq.map((item) => (
                     <div key={item.question}>
-                      <dt className="text-b2g-white font-medium mb-2">{item.question}</dt>
-                      <dd className="text-b2g-slate text-sm leading-relaxed">{item.answer}</dd>
+                      <dt className="text-b2g-obsidian font-medium mb-2">{item.question}</dt>
+                      <dd className="text-neutral-600 text-sm leading-relaxed">{item.answer}</dd>
                     </div>
                   ))}
                 </dl>
               </section>
             ) : null}
 
-            <section id="blog-lead-form" className="mt-16 pt-12 border-t border-b2g-copper/15">
-              <h2 className="b2g-h text-b2g-white text-2xl mb-4">{copy.ctaHeading}</h2>
-              <p className="text-b2g-slate mb-8">{copy.ctaBody}</p>
+            <section id="blog-lead-form" className="mt-16 pt-12 border-t border-black/10">
+              <h2 className="b2g-h text-b2g-obsidian text-2xl mb-4">{copy.ctaHeading}</h2>
+              <p className="text-neutral-600 mb-8">{copy.ctaBody}</p>
               <LeadForm
+                tone="light"
                 source="blog"
                 form={`blog-${post.slug}`}
                 page={typeof window !== 'undefined' ? window.location.href : `/blog/${post.slug}/`}

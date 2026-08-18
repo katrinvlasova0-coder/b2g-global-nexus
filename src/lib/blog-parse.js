@@ -70,11 +70,41 @@ function parseFrontmatter(raw) {
   return data;
 }
 
+function imageUrlPath(url) {
+  return String(url ?? '').split('?')[0];
+}
+
+export function cleanBlogBody(body, coverImage = '') {
+  let text = String(body ?? '').trim();
+
+  text = text.replace(
+    /^[^\n]*is an educational topic, not a promise of a contract award\.[^\n]*\n*/i,
+    '',
+  );
+
+  if (coverImage) {
+    const coverPath = imageUrlPath(coverImage);
+    text = text.replace(/!\[[^\]]*\]\(([^)]+)\)/g, (full, url) =>
+      imageUrlPath(url) === coverPath ? '' : full,
+    );
+  }
+
+  text = text.replace(
+    /\n*##\s*Further reading\s*\n(?:[-*+]\s.*\n|\s*\n)*/i,
+    '\n\n',
+  );
+
+  text = text.replace(/^This educational snapshot of .+\n?/gim, '');
+
+  return text.replace(/\n{3,}/g, '\n\n').trim();
+}
+
 export function parseBlogMdx(slug, raw) {
   const text = String(raw ?? '');
   const match = text.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
   const frontmatter = match ? parseFrontmatter(match[1]) : {};
-  const body = match ? match[2].trim() : text.trim();
+  const rawBody = match ? match[2].trim() : text.trim();
+  const body = cleanBlogBody(rawBody, frontmatter.coverImage || '');
 
   return {
     slug,

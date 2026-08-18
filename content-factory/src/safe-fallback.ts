@@ -6,7 +6,6 @@ import { publishArticle } from './publisher';
 import { addArticleToSitemap } from './sitemap';
 import { ensureRobotsTxt } from './robots';
 import { fetchUnsplashImages } from './images';
-import { getInternalLinks } from './queue';
 import type { ArticleRequest } from './prompts/types';
 import { SAFE_TEMPLATES, type SafeTemplate } from './safe-fallback-templates';
 
@@ -75,6 +74,7 @@ const DE_WORKFLOW = [
   'Im zweiten Schritt markiert man Widersprüche farblich: Vertrag gegen Website, App gegen PDF, Merkblatt gegen Newsletter. Jeder Widerspruch wird eine nummerierte Frage. Fragen ohne Adressat (Aufsicht, Bank, Steuerberater) bleiben unerledigt und dürfen nicht als geklärt gelten. Diese Liste ist die eigentliche Arbeit; der Fließtext der Vorlage ist nur die Zusammenfassung.',
   'Im dritten Schritt wird bewusst weggelassen, was nicht belegt ist. Fehlende Limits, unklare Währungen und undatierte Screenshots fließen nicht in die Schlussfolgerung ein. Stattdessen steht dort ein Satz: „Nicht belegt, Nachfrage offen.“ Genau dieser Satz verhindert, dass Zeitdruck eine Lücke in eine Scheintatsache verwandelt. Nach der Rückmeldung wird die Akte aktualisiert, nicht überschrieben.',
   'Zum Schluss datiert man die Akte und nennt die nächste Prüfgelegenheit: Quartalsende, Vertragsverlängerung oder eine angekündigte Gesetzesänderung. Ohne nächsten Termin versandet die Sorgfalt. Ein Kalendereintrag mit Link auf den Ordner genügt. So bleibt die Einordnung ein Prozess, kein einmaliger Aufsatz, und neue Merkblätter werden nicht übersehen.',
+  'Die Portal-URL stammt aus der Bekanntmachung, nicht aus einer Anzeige. Ein Probe-Upload, eine benannte Rolle und das letzte Addendum als PDF gehören vor dem Stichtag in die Akte. Das ist Arbeitshygiene, kein Zuschlagsversprechen.',
 ];
 
 const EN_WORKFLOW = [
@@ -82,6 +82,7 @@ const EN_WORKFLOW = [
   'Second, mark contradictions in colour: contract versus website, app versus PDF, information sheet versus newsletter. Each contradiction becomes a numbered question. Questions without an addressee (supervisor, bank, tax adviser) stay open and must not be treated as settled. That list is the real work; the memo prose is only the summary.',
   'Third, omit what is not evidenced. Missing caps, unclear currencies and undated screenshots do not enter the conclusion. Instead the file records: “Not evidenced, follow-up open.” That sentence stops time pressure from turning a gap into a fake fact. After the reply, the file is updated, not silently overwritten.',
   'Finally, date the file and name the next review: quarter-end, contract renewal or an announced legal change. Without a next date, diligence fades. A calendar entry with a link to the folder is enough. The briefing stays a process, not a one-off essay, and new information sheets are less likely to be missed.',
+  'Keep the portal URL from the notice, not from an advertisement. A dummy upload, a named role and a saved PDF of the latest addendum belong in the file before the last day. That is operational hygiene, not a promised award.',
 ];
 
 const DE_TAILS = [
@@ -178,7 +179,6 @@ function buildBody(
   lang: 'de' | 'en',
   asOf: string,
   images: Array<{ url: string; alt: string }>,
-  links: Array<{ slug: string; text: string }>,
 ): string {
   const kw = lang === 'de' ? template.keywordDe : template.keywordEn;
   const frames = lang === 'de' ? DE_FRAMES : EN_FRAMES;
@@ -189,18 +189,11 @@ function buildBody(
   const headers = lang === 'de' ? template.tableHeadersDe : template.tableHeadersEn;
   const extras = lang === 'de' ? DE_EXTRAS : EN_EXTRAS;
   const vars = { kw, asOf };
-  const asOfLabel =
-    lang === 'de' ? `Stand der Einordnung: ${asOf}` : `As-of date for this briefing: ${asOf}`;
-
-  const lead = `${kw} is an educational topic, not a promise of a contract award. ${asOfLabel}. This text explains terms, competence and typical documents so readers can check primary sources themselves. B2G Global Services Corp. appears here as an editorial desk, not as a government agency, a bank or a substitute for the tender file. The aim is a traceable folder: source, as-of date, legal entity. Where evidence is missing, the question stays open instead of being closed by habit. Figures without a unit, currency or date are not used as a decision shortcut. That gap between a briefing and a live bid should stay visible.`;
 
   const p = (index: number) =>
     paragraph(frames[index], facts[index], tails[index], vars);
 
-  const img0 = images[0]
-    ? `\n\n![${images[0].alt}](${images[0].url})\n`
-    : '\n';
-  const img1 = images[1]
+  const imgMid = images[1]
     ? `\n\n![${images[1].alt}](${images[1].url})\n`
     : '\n';
 
@@ -211,18 +204,10 @@ function buildBody(
     ...template.tableRows.map((row) => `| ${row[0]} | ${row[1]} | ${row[2]} |`),
   ].join('\n');
 
-  const moreHeading = 'Further reading';
-  const linkLines = links
-    .slice(0, 4)
-    .map((link) => `- [${link.text}](/blog/${link.slug}/)`)
-    .join('\n');
-
   return [
-    lead,
-    img0,
-    `## ${headings[0]}`,
-    '',
     p(0),
+    '',
+    `## ${headings[0]}`,
     '',
     p(1),
     '',
@@ -255,7 +240,7 @@ function buildBody(
       : `The table compresses ${kw} into three comparison rows. It does not replace an official information sheet.`,
     '',
     table,
-    img1,
+    imgMid,
     `## ${headings[4]}`,
     '',
     p(4),
@@ -287,14 +272,6 @@ function buildBody(
     lang === 'de' ? '## Arbeitsablauf für die eigene Akte' : '## A working file workflow',
     '',
     (lang === 'de' ? DE_WORKFLOW : EN_WORKFLOW).join('\n\n'),
-    '',
-    `## ${moreHeading}`,
-    '',
-    linkLines,
-    '',
-    lang === 'de'
-      ? `Dieser Bildungsstand zu „${template.titleDe}“ gilt für ${asOf} und wird nicht als dauerhafte Rechtsauskunft verstanden. Wer handelt, prüft die zum Handlungstag aktuelle Primärquelle der zuständigen Stelle und legt den Ausdruck zur Akte. Abweichungen zwischen dieser Übersicht und dem amtlichen Text sind zugunsten des amtlichen Textes zu lösen. Eine spätere Fassung ersetzt diese Notiz nur, wenn Datum und Quelle erneut dokumentiert sind.`
-      : `This educational snapshot of “${template.titleEn}” is for ${asOf} and is not standing legal advice. Anyone acting should check the primary source from the competent body as of the action date and file a copy. Where this overview and the official text differ, the official text prevails. A later version replaces this note only if date and source are documented again.`,
     '',
     REQUIRED_CTA,
     '',
@@ -333,11 +310,8 @@ export function buildSafeFallbackArticle(
       alt: `${template.keywordDe} — Planung und Prüfung`,
     },
   ];
-  const links =
-    options.links ??
-    getInternalLinks(slug, 4).map((link) => ({ slug: link.slug, text: link.text }));
 
-  const body = buildBody(template, 'en', date, images, links);
+  const body = buildBody(template, 'en', date, images);
 
   const content = `---
 title: ${yamlString(template.titleEn)}
