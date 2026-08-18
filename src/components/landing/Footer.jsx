@@ -11,9 +11,9 @@ export default function Footer() {
     { label: t.nav.whoWeSeek, hash: '#who-we-seek' },
     { label: t.nav.expertise, hash: '#expertise' },
     { label: t.nav.capabilities, hash: '#capabilities' },
-    { label: t.nav.blog, to: '/blog' },
     { label: t.nav.platform, to: '/platform' },
     { label: t.nav.dataRoom, to: '/data-room' },
+    { label: t.nav.blog, to: '/blog' },
     { label: t.nav.contact, hash: '#contact' },
   ];
 

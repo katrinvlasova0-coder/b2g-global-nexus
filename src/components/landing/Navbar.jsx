@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import Logo from '@/components/landing/Logo';
-import LanguageSwitcher from '@/components/landing/LanguageSwitcher';
 import SectionLink from '@/components/landing/SectionLink';
 import { useLanguage } from '@/lib/LanguageContext';
 
@@ -44,12 +43,6 @@ export default function Navbar() {
             </SectionLink>
           ))}
           <Link
-            to="/blog"
-            className="b2g-link-underline text-sm font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors b2g-focus-ring"
-          >
-            {t.nav.blog}
-          </Link>
-          <Link
             to="/platform"
             className="b2g-link-underline text-sm font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors b2g-focus-ring"
           >
@@ -61,6 +54,12 @@ export default function Navbar() {
           >
             {t.nav.dataRoom}
           </Link>
+          <Link
+            to="/blog"
+            className="b2g-link-underline text-sm font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors b2g-focus-ring"
+          >
+            {t.nav.blog}
+          </Link>
           <SectionLink
             hash="#contact"
             className="b2g-link-underline text-sm font-medium text-b2g-white/80 hover:text-b2g-white transition-colors b2g-focus-ring"
@@ -70,7 +69,6 @@ export default function Navbar() {
         </div>
 
         <div className="hidden lg:flex items-center gap-4">
-          <LanguageSwitcher />
           <SectionLink
             hash="#contact"
             className="b2g-copper-bg px-5 py-2.5 text-sm font-semibold tracking-wide b2g-focus-ring transition-transform hover:scale-[1.03] active:scale-95"
@@ -81,7 +79,6 @@ export default function Navbar() {
         </div>
 
         <div className="lg:hidden flex items-center gap-2">
-          <LanguageSwitcher />
           <button
             className="text-b2g-white p-2 b2g-focus-ring"
             onClick={() => setOpen(!open)}
@@ -106,14 +103,14 @@ export default function Navbar() {
                 {link.label}
               </SectionLink>
             ))}
-            <Link to="/blog" onClick={close} className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors">
-              {t.nav.blog}
-            </Link>
             <Link to="/platform" onClick={close} className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors">
               {t.nav.platform}
             </Link>
             <Link to="/data-room" onClick={close} className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors">
               {t.nav.dataRoom}
+            </Link>
+            <Link to="/blog" onClick={close} className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors">
+              {t.nav.blog}
             </Link>
             <SectionLink hash="#contact" onClick={close} className="text-base font-medium text-b2g-white/80 hover:text-b2g-copper transition-colors">
               {t.nav.contact}
