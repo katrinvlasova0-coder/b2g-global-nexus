@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
+import { captureAttribution } from "@/lib/leads";
 
 const getHashId = (hash) => {
   const rawId = hash.slice(1);
@@ -12,8 +13,12 @@ const getHashId = (hash) => {
 };
 
 export default function ScrollToTop() {
-  const { pathname, hash } = useLocation();
+  const { pathname, hash, search } = useLocation();
   const navigationType = useNavigationType();
+
+  useEffect(() => {
+    captureAttribution(search, window.sessionStorage);
+  }, [search]);
 
   useEffect(() => {
     if (hash) {

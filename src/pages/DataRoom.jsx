@@ -35,7 +35,7 @@ export default function DataRoom() {
                         </div>
                         <a
                           href={localDataRoomHref(file)}
-                          download={file.title}
+                          download={`${file.title}.pdf`}
                           className="inline-flex items-center justify-center gap-2 b2g-copper-bg px-4 py-2.5 text-sm font-semibold shrink-0 b2g-focus-ring"
                           style={{ borderRadius: '2px', minHeight: '44px' }}
                         >

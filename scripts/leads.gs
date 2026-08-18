@@ -23,6 +23,12 @@ const HEADERS = [
   'Site',
   'Device',
   'Form',
+  'Consents Accepted',
+  'UTM Source',
+  'UTM Medium',
+  'UTM Campaign',
+  'UTM Term',
+  'UTM Content',
 ];
 
 function doPost(e) {
@@ -46,6 +52,12 @@ function doPost(e) {
     data.site || '',
     data.device || '',
     data.form || 'contact',
+    data.consentsAccepted || '',
+    data.utmSource || '',
+    data.utmMedium || '',
+    data.utmCampaign || '',
+    data.utmTerm || '',
+    data.utmContent || '',
   ]);
 
   return ContentService

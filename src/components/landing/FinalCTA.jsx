@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
-import { buildLeadPayload, detectDevice, submitLead } from '@/lib/leads';
+import { buildLeadPayload, captureAttribution, detectDevice, submitLead } from '@/lib/leads';
 
 export default function FinalCTA() {
   const { t, lang } = useLanguage();
@@ -13,6 +13,7 @@ export default function FinalCTA() {
     e.preventDefault();
     const form = e.currentTarget;
     const fields = Object.fromEntries(new FormData(form).entries());
+    const attribution = captureAttribution(window.location.search, window.sessionStorage);
     const payload = buildLeadPayload(fields, {
       language: lang,
       page: window.location.href,
@@ -20,6 +21,7 @@ export default function FinalCTA() {
       site: window.location.hostname,
       device: detectDevice(navigator.userAgent, window.innerWidth),
       form: 'contact',
+      ...attribution,
     });
 
     setStatus('sending');
@@ -165,10 +167,21 @@ export default function FinalCTA() {
                 </div>
               </div>
 
+              <label className="mt-8 flex items-start gap-3 text-xs text-b2g-slate/80 leading-relaxed cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="consent"
+                  value="yes"
+                  required
+                  className="mt-0.5 h-4 w-4 shrink-0 accent-[#00ff9d]"
+                />
+                <span>{t.contact.consent}</span>
+              </label>
+
               <button
                 type="submit"
                 disabled={status === 'sending' || status === 'submitted'}
-                className="mt-10 w-full b2g-copper-bg px-8 py-4 text-sm font-semibold tracking-wide flex items-center justify-center gap-2 b2g-focus-ring transition-transform hover:scale-[1.01] active:scale-95 disabled:opacity-60"
+                className="mt-6 w-full b2g-copper-bg px-8 py-4 text-sm font-semibold tracking-wide flex items-center justify-center gap-2 b2g-focus-ring transition-transform hover:scale-[1.01] active:scale-95 disabled:opacity-60"
                 style={{ borderRadius: '2px', minHeight: '44px' }}
               >
                 {status === 'submitted' ? t.contact.submitted : status === 'sending' ? t.contact.sending : t.contact.submit}
@@ -178,10 +191,6 @@ export default function FinalCTA() {
               {status === 'error' && (
                 <p className="mt-3 text-xs text-red-400 text-center">{t.contact.error}</p>
               )}
-
-              <p className="mt-4 text-xs text-b2g-slate/60 text-center">
-                {t.contact.consent}
-              </p>
             </motion.form>
           </div>
         </div>
