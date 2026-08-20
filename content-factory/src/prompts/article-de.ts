@@ -35,7 +35,7 @@ Write a complete English educational article for the B2G Global blog (public pro
 - **Audience:** ${getSegmentDesc(req.taSegments)}
 
 ## IMAGES
-- Do **not** paste the cover image (`coverImage` in frontmatter) into the body. The site already renders it above the article.
+- Do **not** paste the cover image (\`coverImage\` in frontmatter) into the body. The site already renders it above the article.
 - Place remaining images later in the body, after at least one H2.
 ${imgMarkdown || '- (no extra body images)'}
 

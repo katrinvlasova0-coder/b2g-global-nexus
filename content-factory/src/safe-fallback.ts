@@ -163,6 +163,15 @@ export function existingFallbackSlugForDate(
   return found ? found.replace(/\.mdx$/, '') : null;
 }
 
+/** True when this exact daily fallback slug is already on disk. */
+export function fallbackSlugExists(
+  templateId: string,
+  date: string,
+  contentDir = getContentDir(),
+): boolean {
+  return fs.existsSync(path.join(contentDir, `fallback-${templateId}-${date}.mdx`));
+}
+
 export function selectTemplate(date: string): SafeTemplate {
   const [year, month, day] = date.split('-').map(Number);
   const utc = new Date(Date.UTC(year, month - 1, day));
@@ -393,14 +402,16 @@ export async function publishSafeFallback(options: {
     }
   }
 
-  const existing = existingFallbackSlugForDate(date, contentDir);
-  if (existing) {
-    console.log(`ℹ️ Fallback skipped: ${existing} already exists for ${date}`);
-    return { published: false, skipped: true, slug: existing, reason: 'already-exists' };
-  }
-
   const template = selectTemplate(date);
   const slug = `fallback-${template.id}-${date}`;
+
+  // Only skip when THIS rotation's slug already exists. Pre-seeded articles for the
+  // same calendar day (different template ids) must not block the scheduled post.
+  if (fallbackSlugExists(template.id, date, contentDir)) {
+    console.log(`ℹ️ Fallback skipped: ${slug} already exists for ${date}`);
+    return { published: false, skipped: true, slug, reason: 'already-exists' };
+  }
+
   console.log(`🛟 Publishing safe fallback: ${slug}`);
   console.log(`   Reason: ${reason}`);
   console.log(`::warning::Content factory used a safe fallback article (${slug}). ${reason}`);

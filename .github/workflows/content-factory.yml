@@ -105,6 +105,7 @@ jobs:
 
       - name: Show queue before generation
         if: steps.gen.outputs.run == 'true' || github.event_name == 'workflow_dispatch'
+        continue-on-error: true
         run: |
           cd content-factory
           npm run queue:list
@@ -153,10 +154,25 @@ jobs:
           SITE_PUBLIC_DIR: ../public
 
       - name: Publish safe fallback if no new article
+        id: fallback
         if: steps.gen.outputs.run == 'true'
         run: |
           cd content-factory
-          npx tsx src/index.ts fallback --only-if-missing --reason "ci-safety-net (mode=${{ steps.gen.outputs.mode }}, batch=${{ steps.batch.outcome }})"
+          set +e
+          OUTPUT=$(npx tsx src/index.ts fallback --only-if-missing --reason "ci-safety-net (mode=${{ steps.gen.outputs.mode }}, batch=${{ steps.batch.outcome }})" 2>&1)
+          STATUS=$?
+          set -e
+          echo "$OUTPUT"
+          if echo "$OUTPUT" | grep -q "Safe fallback published:"; then
+            echo "status=published" >> "$GITHUB_OUTPUT"
+          elif echo "$OUTPUT" | grep -q "Fallback skipped:"; then
+            echo "status=skipped" >> "$GITHUB_OUTPUT"
+          elif [ $STATUS -eq 0 ]; then
+            echo "status=ok" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=failed" >> "$GITHUB_OUTPUT"
+            exit $STATUS
+          fi
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
@@ -181,9 +197,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add content/blog/ public/sitemap.xml public/robots.txt public/llms.txt content-factory/queue/
           if git diff --staged --quiet; then
-            TODAY=$(date -u +%F)
-            if ls content/blog/fallback-*-"$TODAY".mdx >/dev/null 2>&1; then
-              echo "No new files to commit — today's fallback is already in the repo."
+            if [ "${{ steps.fallback.outputs.status }}" = "skipped" ]; then
+              echo "No new files to commit — fallback skipped (exact slug already present)."
               exit 0
             fi
             echo "::error::No article files to commit — generation and fallback both produced nothing. Check logs above."
