@@ -65,10 +65,21 @@ jobs:
             echo "mode=claude" >> "$GITHUB_OUTPUT"
             echo "run=true" >> "$GITHUB_OUTPUT"
             echo "✅ Claude API available — real article generation"
-          elif [ "$IS_SCHEDULE" = "true" ]; then
-            echo "mode=fallback-only" >> "$GITHUB_OUTPUT"
-            echo "run=true" >> "$GITHUB_OUTPUT"
-            echo "⚠️ ANTHROPIC_API_KEY missing on publish day — will publish a safe fallback article"
+          elif [ "$IS_SCHEDULE" = "true" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # Schedule and manual re-runs still ship a safe fallback when Claude is unavailable.
+            if [ "$INPUT_MOCK" = "true" ] && [ "$PUBLISH_MOCK" = "true" ]; then
+              echo "mode=mock" >> "$GITHUB_OUTPUT"
+              echo "run=true" >> "$GITHUB_OUTPUT"
+              echo "🧪 Manual mock publish enabled (test content only)"
+            elif [ "$INPUT_MOCK" = "true" ]; then
+              echo "mode=test-only" >> "$GITHUB_OUTPUT"
+              echo "run=false" >> "$GITHUB_OUTPUT"
+              echo "🧪 Mock selected but publish_mock=false — only integration test will run"
+            else
+              echo "mode=fallback-only" >> "$GITHUB_OUTPUT"
+              echo "run=true" >> "$GITHUB_OUTPUT"
+              echo "⚠️ ANTHROPIC_API_KEY missing — will publish a safe fallback article"
+            fi
           elif [ "$INPUT_MOCK" = "true" ] && [ "$PUBLISH_MOCK" = "true" ]; then
             echo "mode=mock" >> "$GITHUB_OUTPUT"
             echo "run=true" >> "$GITHUB_OUTPUT"
