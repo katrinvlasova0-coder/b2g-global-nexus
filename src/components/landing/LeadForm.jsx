@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/lib/LanguageContext';
 import { buildLeadPayload, captureAttribution, detectDevice, submitLead } from '@/lib/leads';
+import { trackLead } from '@/lib/metaPixel';
 
 export default function LeadForm({
   source = 'website-contact',
@@ -34,6 +35,7 @@ export default function LeadForm({
     setStatus('sending');
     try {
       await submitLead(payload);
+      trackLead({ source, form, ...attribution });
       setStatus('submitted');
       formEl.reset();
     } catch (err) {

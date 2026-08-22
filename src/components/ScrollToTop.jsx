@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, useNavigationType } from "react-router-dom";
 import { captureAttribution } from "@/lib/leads";
+import { trackPageView } from "@/lib/metaPixel";
 
 const getHashId = (hash) => {
   const rawId = hash.slice(1);
@@ -15,10 +16,19 @@ const getHashId = (hash) => {
 export default function ScrollToTop() {
   const { pathname, hash, search } = useLocation();
   const navigationType = useNavigationType();
+  const isFirstPageView = useRef(true);
 
   useEffect(() => {
     captureAttribution(search, window.sessionStorage);
   }, [search]);
+
+  useEffect(() => {
+    if (isFirstPageView.current) {
+      isFirstPageView.current = false;
+      return;
+    }
+    trackPageView();
+  }, [pathname]);
 
   useEffect(() => {
     if (hash) {
