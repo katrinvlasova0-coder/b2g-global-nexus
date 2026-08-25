@@ -1,4 +1,4 @@
-export const BLOG_CATEGORIES = ['Tenders', 'Documentation', 'Financing', 'Contractors'];
+export const BLOG_CATEGORIES = ['Tenders', 'Documentation', 'Financing', 'Contractors', 'AI'];
 
 function unquote(value) {
   const trimmed = String(value ?? '').trim();

@@ -4,6 +4,7 @@
 
 Site: https://b2g.org/
 Blog: https://b2g.org/blog/
+AI Tender Specialist: https://b2g.org/ai/
 
 ## Articles
 

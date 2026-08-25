@@ -49,6 +49,12 @@ export default function Navbar() {
             {t.nav.platform}
           </Link>
           <Link
+            to="/ai"
+            className="b2g-link-underline text-sm font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors b2g-focus-ring"
+          >
+            {t.nav.ai}
+          </Link>
+          <Link
             to="/data-room"
             className="b2g-link-underline text-sm font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors b2g-focus-ring"
           >
@@ -105,6 +111,9 @@ export default function Navbar() {
             ))}
             <Link to="/platform" onClick={close} className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors">
               {t.nav.platform}
+            </Link>
+            <Link to="/ai" onClick={close} className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors">
+              {t.nav.ai}
             </Link>
             <Link to="/data-room" onClick={close} className="text-base font-medium text-b2g-cyan hover:text-b2g-cyan/80 transition-colors">
               {t.nav.dataRoom}

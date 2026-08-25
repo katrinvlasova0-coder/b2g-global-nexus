@@ -12,6 +12,7 @@ export default function Footer() {
     { label: t.nav.expertise, hash: '#expertise' },
     { label: t.nav.capabilities, hash: '#capabilities' },
     { label: t.nav.platform, to: '/platform' },
+    { label: t.nav.ai, to: '/ai' },
     { label: t.nav.dataRoom, to: '/data-room' },
     { label: t.nav.blog, to: '/blog' },
     { label: t.nav.contact, hash: '#contact' },

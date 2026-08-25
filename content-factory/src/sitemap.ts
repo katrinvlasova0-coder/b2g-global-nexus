@@ -56,6 +56,13 @@ function staticEntries(lastmod: string): SitemapEntry[] {
       'xhtml:link': hreflang(`${BASE_URL}/platform/`),
     },
     {
+      loc: `${BASE_URL}/ai/`,
+      lastmod,
+      changefreq: 'weekly',
+      priority: '0.8',
+      'xhtml:link': hreflang(`${BASE_URL}/ai/`),
+    },
+    {
       loc: `${BASE_URL}/data-room/`,
       lastmod,
       changefreq: 'weekly',

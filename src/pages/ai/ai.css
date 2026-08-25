@@ -1,0 +1,50 @@
+/* Scoped utilities for /ai landing (zip visual) */
+.b2g-ai {
+  font-family: var(--font-body);
+  color: #0a1330;
+  background: #fff;
+}
+
+.b2g-ai h1,
+.b2g-ai h2,
+.b2g-ai h3,
+.b2g-ai h4,
+.b2g-ai h5 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+.b2g-ai .text-balance {
+  text-wrap: balance;
+}
+
+.b2g-ai .bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.b2g-ai .bg-grid-dark {
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.b2g-ai .glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.b2g-ai .text-gradient-blue {
+  background: linear-gradient(135deg, #00ffb2 0%, #00e5ff 35%, #007bff 75%, #0040ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.b2g-ai .glow-blue {
+  box-shadow: 0 0 40px -10px rgba(0, 123, 255, 0.55);
+}

@@ -4,6 +4,7 @@ export const CLUSTER_TAG: Record<string, { de: string; en: string }> = {
   Documentation: { de: 'Documentation', en: 'Documentation' },
   Financing: { de: 'Financing', en: 'Financing' },
   Contractors: { de: 'Contractors', en: 'Contractors' },
+  AI: { de: 'AI', en: 'AI' },
 };
 
 export function clusterTagDe(cluster: string): string {

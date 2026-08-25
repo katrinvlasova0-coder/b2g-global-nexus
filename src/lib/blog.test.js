@@ -49,7 +49,7 @@ test('parseBlogMdx reads frontmatter, FAQ list and body', () => {
 });
 
 test('BLOG_CATEGORIES match the landing capability clusters', () => {
-  assert.deepEqual(BLOG_CATEGORIES, ['Tenders', 'Documentation', 'Financing', 'Contractors']);
+  assert.deepEqual(BLOG_CATEGORIES, ['Tenders', 'Documentation', 'Financing', 'Contractors', 'AI']);
 });
 
 const MESSY_BODY = `bid bonds is an educational topic, not a promise of a contract award. As-of date for this briefing: 2026-08-18. This text explains terms.

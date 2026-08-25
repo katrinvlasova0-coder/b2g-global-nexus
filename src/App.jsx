@@ -11,6 +11,7 @@ import Platform from '@/pages/Platform';
 import DataRoom from '@/pages/DataRoom';
 import Blog from '@/pages/Blog';
 import BlogPost from '@/pages/BlogPost';
+import Ai from '@/pages/Ai';
 import { LanguageProvider } from '@/lib/LanguageContext';
 // Add page imports here
 
@@ -43,6 +44,7 @@ const AuthenticatedApp = () => {
       {/* Add your page Route elements here */}
       <Route path="/" element={<Landing />} />
       <Route path="/platform" element={<Platform />} />
+      <Route path="/ai" element={<Ai />} />
       <Route path="/data-room" element={<DataRoom />} />
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog/:slug" element={<BlogPost />} />

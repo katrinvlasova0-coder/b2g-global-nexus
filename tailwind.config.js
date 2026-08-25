@@ -60,35 +60,72 @@ module.exports = {
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
   			},
-  			b2g: {
-  				obsidian: '#00001a',
-  				ebonite: '#050530',
-  				copper: '#0066ff',
-  				cyan: '#00ff9d',
-  				white: '#F0F4FF',
-  				slate: '#9CA3C4'
-  			}
-  		},
-  		fontFamily: {
-  			heading: ['var(--font-heading)'],
-  			body: ['var(--font-body)'],
-  			display: ['var(--font-display)'],
-  			mono: ['var(--font-mono)']
-  		},
-  		keyframes: {
-  			'accordion-down': {
-  				from: { height: '0' },
-  				to: { height: 'var(--radix-accordion-content-height)' }
-  			},
-  			'accordion-up': {
-  				from: { height: 'var(--radix-accordion-content-height)' },
-  				to: { height: '0' }
-  			}
-  		},
-  		animation: {
-  			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
-  		}
+			b2g: {
+				obsidian: '#00001a',
+				ebonite: '#050530',
+				copper: '#0066ff',
+				cyan: '#00ff9d',
+				white: '#F0F4FF',
+				slate: '#9CA3C4'
+			},
+			/* /ai landing (zip palette) — do not confuse with b2g.cyan */
+			navy: {
+				DEFAULT: '#000000',
+				50: '#F0F4FF',
+				100: '#DCE6FF',
+				200: '#AEC6FF',
+				300: '#7CA0F5',
+				400: '#4A78E8',
+				500: '#1E3258',
+				600: '#0A1330',
+				700: '#070F24',
+				800: '#040813',
+				900: '#000000'
+			},
+			graphite: {
+				DEFAULT: '#111418',
+				light: '#1C2026'
+			},
+			electric: {
+				DEFAULT: '#007BFF',
+				light: '#00E5FF',
+				dark: '#0040FF'
+			},
+			cyan: {
+				DEFAULT: '#00E5FF',
+				light: '#00FFB2'
+			}
+		},
+		fontFamily: {
+			heading: ['var(--font-heading)'],
+			body: ['var(--font-body)'],
+			display: ['var(--font-display)'],
+			mono: ['var(--font-mono)']
+		},
+		keyframes: {
+			'accordion-down': {
+				from: { height: '0' },
+				to: { height: 'var(--radix-accordion-content-height)' }
+			},
+			'accordion-up': {
+				from: { height: 'var(--radix-accordion-content-height)' },
+				to: { height: '0' }
+			},
+			'fade-up': {
+				from: { opacity: '0', transform: 'translateY(24px)' },
+				to: { opacity: '1', transform: 'translateY(0)' }
+			},
+			'pulse-soft': {
+				'0%, 100%': { opacity: '1' },
+				'50%': { opacity: '0.5' }
+			}
+		},
+		animation: {
+			'accordion-down': 'accordion-down 0.2s ease-out',
+			'accordion-up': 'accordion-up 0.2s ease-out',
+			'fade-up': 'fade-up 0.7s ease-out both',
+			'pulse-soft': 'pulse-soft 2s ease-in-out infinite'
+		}
   	}
   },
   plugins: [require("tailwindcss-animate")],
