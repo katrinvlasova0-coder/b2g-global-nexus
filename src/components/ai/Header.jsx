@@ -44,7 +44,7 @@ export default function Header() {
           <div className="flex items-center gap-1.5 shrink-0">
             <div className="h-10 md:h-12 w-px bg-gradient-to-b from-cyan-light/70 to-electric/70" />
             <Link to="/" className="shrink-0" aria-label="B2G home">
-              <Logo className="h-12 md:h-14 w-auto" />
+              <Logo className="h-9 sm:h-12 md:h-14 w-auto max-w-[42vw] object-contain object-left" />
             </Link>
           </div>
 

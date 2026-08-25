@@ -90,11 +90,34 @@ export async function submitLead(payload, url = import.meta.env?.VITE_LEADS_WEBH
   }
 
   const body = new URLSearchParams(payload);
+  // Do not use no-cors: Google Apps Script redirects to googleusercontent.com,
+  // and opaque mode can report success without completing the write.
   const response = await fetch(url, {
     method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
     body,
-    mode: 'no-cors',
+    redirect: 'follow',
   });
 
-  return { ok: true, type: response?.type || 'opaque' };
+  if (!response.ok) {
+    throw new Error(`webhook_http_${response.status}`);
+  }
+
+  const text = await response.text();
+  if (text) {
+    try {
+      const json = JSON.parse(text);
+      if (json && json.ok === false) {
+        throw new Error('webhook_rejected');
+      }
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        // Non-JSON success body is acceptable for some deployments.
+      } else {
+        throw err;
+      }
+    }
+  }
+
+  return { ok: true, type: response.type || 'basic' };
 }

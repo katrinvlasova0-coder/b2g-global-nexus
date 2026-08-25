@@ -93,7 +93,12 @@ test('submitLead posts tagged lead fields to the webhook', async () => {
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (url, options) => {
     calls.push({ url, options });
-    return { type: 'opaque' };
+    return {
+      ok: true,
+      status: 200,
+      type: 'basic',
+      text: async () => JSON.stringify({ ok: true }),
+    };
   };
 
   try {
@@ -122,7 +127,8 @@ test('submitLead posts tagged lead fields to the webhook', async () => {
     assert.equal(calls.length, 1);
     assert.equal(calls[0].url, 'https://script.google.com/macros/s/test-webhook/exec');
     assert.equal(calls[0].options.method, 'POST');
-    assert.equal(calls[0].options.mode, 'no-cors');
+    assert.equal(calls[0].options.redirect, 'follow');
+    assert.match(String(calls[0].options.headers['Content-Type']), /application\/x-www-form-urlencoded/);
 
     const body = String(calls[0].options.body);
     assert.match(body, /name=Test\+Lead/);
@@ -135,6 +141,24 @@ test('submitLead posts tagged lead fields to the webhook', async () => {
     assert.match(body, /site=b2g.org/);
     assert.match(body, /consentsAccepted=yes/);
     assert.match(body, /utmSource=meta/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test('submitLead throws on non-OK webhook HTTP status', async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => ({
+    ok: false,
+    status: 500,
+    type: 'basic',
+    text: async () => 'error',
+  });
+  try {
+    await assert.rejects(
+      () => submitLead({ name: 'Test' }, 'https://script.google.com/macros/s/test-webhook/exec'),
+      { message: 'webhook_http_500' },
+    );
   } finally {
     globalThis.fetch = originalFetch;
   }

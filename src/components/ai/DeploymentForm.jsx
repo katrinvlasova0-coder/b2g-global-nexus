@@ -1,14 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CheckCircle2, Rocket } from "lucide-react";
 import { Section, SectionHeading } from "./Section";
 import Reveal from "./Reveal";
-import { buildAiDeployLeadPayload } from "@/lib/aiLeads";
+import { AI_SOLUTIONS, buildAiDeployLeadPayload } from "@/lib/aiLeads";
 import { captureAttribution, detectDevice, submitLead } from "@/lib/leads";
 import { trackLead } from "@/lib/metaPixel";
 import { useLanguage } from "@/pages/ai/i18n/LanguageContext";
 
-const SOLUTIONS = ["AI Tender Specialist", "AI Head of Tenders", "AI Tender Department"];
 const INDUSTRIES = ["Construction", "Engineering", "Manufacturing", "Equipment Supply", "IT", "Logistics", "Healthcare", "Infrastructure", "Professional Services", "Other"];
+const PRODUCT_KEY = "b2g_ai_product";
+
+function readPreselectedProduct() {
+  try {
+    const fromStorage = sessionStorage.getItem(PRODUCT_KEY);
+    if (AI_SOLUTIONS.includes(fromStorage)) return fromStorage;
+  } catch {
+    /* ignore */
+  }
+  try {
+    const q = new URLSearchParams(window.location.search).get("product");
+    if (AI_SOLUTIONS.includes(q)) return q;
+  } catch {
+    /* ignore */
+  }
+  return "AI Tender Specialist";
+}
 
 function inputCls() {
   return "w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-navy-200 focus:border-cyan focus:ring-2 focus:ring-cyan/20 outline-none";
@@ -34,6 +50,11 @@ export default function DeploymentForm() {
   const [error, setError] = useState("");
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
+  useEffect(() => {
+    const product = readPreselectedProduct();
+    setForm((f) => ({ ...f, preferred_solution: product }));
+  }, []);
+
   const submit = async (e) => {
     e.preventDefault();
     setError("");
@@ -56,7 +77,12 @@ export default function DeploymentForm() {
         ...attribution,
       });
       await submitLead(payload);
-      trackLead({ source: "ai-landing", form: "ai-deploy", ...attribution });
+      trackLead({ source: "ai-landing", form: "ai-deploy", product: form.preferred_solution, ...attribution });
+      try {
+        sessionStorage.removeItem(PRODUCT_KEY);
+      } catch {
+        /* ignore */
+      }
       setDone(true);
     } catch (err) {
       console.error("AI deploy lead failed:", err);
@@ -72,32 +98,35 @@ export default function DeploymentForm() {
         light
         eyebrow="DEPLOYMENT"
         title={<>DEPLOY YOUR FIRST<br />AI TENDER SPECIALIST</>}
-        subtitle="Choose the AI workforce level that fits your tender operation. Our team will contact you with next steps — no payment is taken on this form."
+        subtitle="Choose the AI workforce level. We tag your choice in the lead so the team knows exactly what to deploy."
       />
       <Reveal>
-        <div className="mt-12 max-w-3xl mx-auto rounded-2xl border border-white/10 bg-navy-800/60 p-6 md:p-8">
+        <div className="mt-12 max-w-3xl mx-auto rounded-2xl border border-white/10 bg-navy-800/60 p-5 sm:p-6 md:p-8">
           {done ? (
             <div className="text-center py-10">
               <CheckCircle2 size={56} className="mx-auto text-emerald-400 mb-4" />
               <h3 className="text-xl font-bold text-white">Application received.</h3>
-              <p className="mt-2 text-navy-100">Our implementation team will review your application and contact you with next steps.</p>
+              <p className="mt-2 text-navy-100">
+                Requested: <span className="text-cyan-light font-semibold">{form.preferred_solution}</span>. Our team will contact you with next steps.
+              </p>
             </div>
           ) : (
             <form onSubmit={submit} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-navy-200 mb-2">Select required solution</label>
-                <div className="grid sm:grid-cols-3 gap-2">
-                  {SOLUTIONS.map((s) => (
+                <label className="block text-xs font-medium text-navy-200 mb-2">What do you want to deploy? *</label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {AI_SOLUTIONS.map((s) => (
                     <button
                       type="button"
                       key={s}
                       onClick={() => setForm((f) => ({ ...f, preferred_solution: s }))}
-                      className={`px-3 py-2.5 rounded-lg text-xs font-semibold border transition-all ${form.preferred_solution === s ? "border-cyan bg-cyan/15 text-cyan-light" : "border-white/10 text-navy-100 hover:border-white/20"}`}
+                      className={`px-3 py-3 rounded-lg text-xs font-semibold border transition-all text-left sm:text-center ${form.preferred_solution === s ? "border-cyan bg-cyan/15 text-cyan-light" : "border-white/10 text-navy-100 hover:border-white/20"}`}
                     >
                       {s}
                     </button>
                   ))}
                 </div>
+                <p className="mt-2 text-[11px] text-navy-300">Selected product is saved with the lead: {form.preferred_solution}</p>
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 <Field label="Company *" value={form.company} onChange={set("company")} dark />
@@ -141,9 +170,9 @@ export default function DeploymentForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-cyan text-navy-900 text-sm font-bold hover:bg-cyan-light disabled:opacity-50 transition-colors"
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg bg-cyan text-navy-900 text-sm font-bold hover:bg-cyan-light disabled:opacity-50 transition-colors min-h-[48px]"
               >
-                <Rocket size={16} /> {loading ? "SUBMITTING..." : "APPLY FOR DEPLOYMENT"}
+                <Rocket size={16} /> {loading ? "SUBMITTING..." : `APPLY — ${form.preferred_solution.toUpperCase()}`}
               </button>
               <p className="text-center text-xs text-navy-300">No payment is processed. Pricing is defined per implementation.</p>
             </form>

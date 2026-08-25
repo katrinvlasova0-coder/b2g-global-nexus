@@ -15,7 +15,7 @@ export const translations = {
       badge: "TENDER DEPARTMENT AS A SERVICE",
       h1a: "YOUR TENDER DEPARTMENT.",
       h1b: "NOW POWERED BY AI.",
-      p: "B2G deploys AI employees capable of managing the complete tender lifecycle — from opportunity discovery and document analysis to bid preparation, cost estimation, supplier sourcing, contracts and reporting.",
+      p: "Hire an AI Tender Specialist that runs the tender lifecycle end-to-end — discovery, analysis, bid prep, sourcing, contracts — while your team keeps critical decisions.",
       cta1: "HIRE AN AI TENDER SPECIALIST",
       cta2: "SEE HOW IT WORKS",
       subtext: "From opportunity discovery to signed contract.",
