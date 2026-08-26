@@ -4,7 +4,6 @@
 
 Site: https://b2g.org/
 Blog: https://b2g.org/blog/
-AI Tender Specialist: https://b2g.org/ai/
 
 ## Articles
 
@@ -13,6 +12,7 @@ AI Tender Specialist: https://b2g.org/ai/
 - [Bid bonds and tender guarantees: amount, wording, release](https://b2g.org/blog/fallback-bid-security-basics-2026-08-24/)
 - [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-08-20/)
 - [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-08-22/)
+- [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-08-26/)
 - [Procurement eligibility: exclusion, capacity and references](https://b2g.org/blog/fallback-eligibility-evidence-2026-08-21/)
 - [Selecting subcontractors for public works: licences, KYC, backups](https://b2g.org/blog/fallback-named-subcontractors-2026-08-23/)
 - [How to read a tender notice: fields, lots and deadlines](https://b2g.org/blog/fallback-read-tender-notice-2026-08-19/)
