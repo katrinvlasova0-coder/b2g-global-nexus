@@ -10,6 +10,7 @@ Blog: https://b2g.org/blog/
 - [How to map tender documentation before you write prose](https://b2g.org/blog/fallback-bid-file-map-2026-08-20/)
 - [Bid bonds and tender guarantees: amount, wording, release](https://b2g.org/blog/fallback-bid-security-basics-2026-08-18/)
 - [Bid bonds and tender guarantees: amount, wording, release](https://b2g.org/blog/fallback-bid-security-basics-2026-08-24/)
+- [Bid bonds and tender guarantees: amount, wording, release](https://b2g.org/blog/fallback-bid-security-basics-2026-08-30/)
 - [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-08-20/)
 - [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-08-22/)
 - [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-08-26/)
