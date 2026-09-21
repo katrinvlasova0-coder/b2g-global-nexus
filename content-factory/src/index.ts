@@ -185,8 +185,8 @@ program
       .filter((f) => f.endsWith('.mdx'))
       .map((f) => f.replace('.mdx', ''));
 
-    regenerateSitemap(slugs);
-    console.log(`✅ Sitemap rebuilt with ${slugs.length} entries`);
+    const indexed = regenerateSitemap(slugs);
+    console.log(`✅ Sitemap rebuilt with ${indexed} indexable blog entries`);
   });
 
 program

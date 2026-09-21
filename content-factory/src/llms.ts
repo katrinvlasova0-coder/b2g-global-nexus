@@ -13,15 +13,24 @@ function getBaseUrl(): string {
   return (process.env.SITE_BASE_URL || 'https://b2g.org').replace(/\/$/, '');
 }
 
+/** Dated safe-fallback copies are near-duplicates and must not be advertised. */
+const FALLBACK_SLUG = /^fallback-/;
+
+export function isFallbackSlug(slug: string): boolean {
+  return FALLBACK_SLUG.test(slug);
+}
+
 function listSlugs(explicit?: string[]): string[] {
-  if (explicit) return explicit;
-  const dir = getContentDir();
-  if (!fs.existsSync(dir)) return [];
-  return fs
-    .readdirSync(dir)
-    .filter((f) => f.endsWith('.mdx'))
-    .map((f) => f.replace(/\.mdx$/, ''))
-    .sort();
+  const fromDisk = (): string[] => {
+    const dir = getContentDir();
+    if (!fs.existsSync(dir)) return [];
+    return fs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith('.mdx'))
+      .map((f) => f.replace(/\.mdx$/, ''));
+  };
+
+  return (explicit ?? fromDisk()).filter((slug) => !isFallbackSlug(slug)).sort();
 }
 
 function titleFromMdx(slug: string): string {
