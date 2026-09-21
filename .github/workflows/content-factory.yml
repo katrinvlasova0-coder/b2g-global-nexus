@@ -40,7 +40,9 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           HAS_ANTHROPIC="false"
-          if [ -n "$ANTHROPIC_API_KEY" ]; then
+          # Treat missing, empty, and whitespace-only secrets as unset.
+          KEY_TRIMMED="${ANTHROPIC_API_KEY//[[:space:]]/}"
+          if [ -n "$KEY_TRIMMED" ]; then
             HAS_ANTHROPIC="true"
           fi
 
@@ -65,8 +67,15 @@ jobs:
             echo "mode=claude" >> "$GITHUB_OUTPUT"
             echo "run=true" >> "$GITHUB_OUTPUT"
             echo "✅ Claude API available — real article generation"
-          elif [ "$IS_SCHEDULE" = "true" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            # Schedule and manual re-runs still ship a safe fallback when Claude is unavailable.
+          elif [ "$IS_SCHEDULE" = "true" ]; then
+            # Cron must not keep shipping fallback-* when Claude is unavailable
+            # (live sitemap was 23/23 fallback posts). Set repo secret ANTHROPIC_API_KEY.
+            echo "mode=missing-key" >> "$GITHUB_OUTPUT"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "::error::ANTHROPIC_API_KEY secret missing/empty — scheduled publish skipped (no fallback article). Add GitHub → Settings → Secrets and variables → Actions → ANTHROPIC_API_KEY (optional ANTHROPIC_MODEL=claude-sonnet-5)."
+            exit 1
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # Manual only: mock publish, test-only, or intentional fallback-only safety net.
             if [ "$INPUT_MOCK" = "true" ] && [ "$PUBLISH_MOCK" = "true" ]; then
               echo "mode=mock" >> "$GITHUB_OUTPUT"
               echo "run=true" >> "$GITHUB_OUTPUT"
@@ -78,7 +87,7 @@ jobs:
             else
               echo "mode=fallback-only" >> "$GITHUB_OUTPUT"
               echo "run=true" >> "$GITHUB_OUTPUT"
-              echo "⚠️ ANTHROPIC_API_KEY missing — will publish a safe fallback article"
+              echo "⚠️ ANTHROPIC_API_KEY missing — manual run will publish a safe fallback article"
             fi
           elif [ "$INPUT_MOCK" = "true" ] && [ "$PUBLISH_MOCK" = "true" ]; then
             echo "mode=mock" >> "$GITHUB_OUTPUT"
@@ -236,4 +245,6 @@ jobs:
         if: steps.gen.outputs.run != 'true'
         run: |
           echo "Generation skipped (${{ steps.gen.outputs.mode }})."
-          echo "Add ANTHROPIC_API_KEY for real articles, or run manually with mock=true + publish_mock=true to test the pipeline."
+          echo "For real Claude articles: set repo secret ANTHROPIC_API_KEY (optional ANTHROPIC_MODEL)."
+          echo "Pipeline test without Claude: workflow_dispatch with mock=true + publish_mock=true."
+          echo "Manual fallback only (no Claude): workflow_dispatch without mock (mode=fallback-only)."

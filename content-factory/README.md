@@ -24,6 +24,22 @@ npm run test:fallback
 
 See `.env.example`. `SITE_BASE_URL` defaults to `https://b2g.org`.
 
+### GitHub Actions secrets (production cron)
+
+Repo → **Settings → Secrets and variables → Actions**. Names only (never commit values):
+
+| Secret | Required | Purpose |
+| --- | --- | --- |
+| `ANTHROPIC_API_KEY` | **yes** for real articles | Claude generation. If missing/empty on **schedule**, the job **fails** with `mode=missing-key` (no automatic `fallback-*` posts). Manual `workflow_dispatch` can still use fallback-only / mock. |
+| `ANTHROPIC_MODEL` | optional | Defaults to `claude-sonnet-5` in code/`.env.example`. |
+| `UNSPLASH_ACCESS_KEY` | optional | Cover images (stock fallbacks if unset). |
+| `RESEND_API_KEY` | optional | Email notify on publish. |
+| `NOTIFY_EMAIL` | optional | Notify recipient. |
+
+Local: `cp .env.example .env` and fill the same names. Do not commit `.env`.
+
+Schedule: cron `0 8 * * *` (08:00 UTC daily), publish every other day from anchor `2026-08-18`.
+
 ## Contract
 
 - English only (no `---en---` block)
