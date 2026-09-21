@@ -7,29 +7,6 @@ Blog: https://b2g.org/blog/
 
 ## Articles
 
-- [How to map tender documentation before you write prose](https://b2g.org/blog/fallback-bid-file-map-2026-08-20/)
-- [Bid bonds and tender guarantees: amount, wording, release](https://b2g.org/blog/fallback-bid-security-basics-2026-08-18/)
-- [Bid bonds and tender guarantees: amount, wording, release](https://b2g.org/blog/fallback-bid-security-basics-2026-08-24/)
-- [Bid bonds and tender guarantees: amount, wording, release](https://b2g.org/blog/fallback-bid-security-basics-2026-08-30/)
-- [Bid bonds and tender guarantees: amount, wording, release](https://b2g.org/blog/fallback-bid-security-basics-2026-09-05/)
-- [Bid bonds and tender guarantees: amount, wording, release](https://b2g.org/blog/fallback-bid-security-basics-2026-09-11/)
-- [Bid bonds and tender guarantees: amount, wording, release](https://b2g.org/blog/fallback-bid-security-basics-2026-09-17/)
-- [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-08-20/)
-- [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-08-22/)
-- [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-08-26/)
-- [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-09-01/)
-- [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-09-07/)
-- [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-09-13/)
-- [Electronic procurement portals: logins, timestamps, addenda](https://b2g.org/blog/fallback-e-procurement-portals-2026-09-19/)
-- [Procurement eligibility: exclusion, capacity and references](https://b2g.org/blog/fallback-eligibility-evidence-2026-08-21/)
-- [Selecting subcontractors for public works: licences, KYC, backups](https://b2g.org/blog/fallback-named-subcontractors-2026-08-23/)
-- [How to read a tender notice: fields, lots and deadlines](https://b2g.org/blog/fallback-read-tender-notice-2026-08-19/)
-- [How to read a tender notice: fields, lots and deadlines](https://b2g.org/blog/fallback-read-tender-notice-2026-08-22/)
-- [How to read a tender notice: fields, lots and deadlines](https://b2g.org/blog/fallback-read-tender-notice-2026-08-28/)
-- [How to read a tender notice: fields, lots and deadlines](https://b2g.org/blog/fallback-read-tender-notice-2026-09-03/)
-- [How to read a tender notice: fields, lots and deadlines](https://b2g.org/blog/fallback-read-tender-notice-2026-09-09/)
-- [How to read a tender notice: fields, lots and deadlines](https://b2g.org/blog/fallback-read-tender-notice-2026-09-15/)
-- [How to read a tender notice: fields, lots and deadlines](https://b2g.org/blog/fallback-read-tender-notice-2026-09-21/)
 - [How to find public tenders worldwide: sources, filters, daily roundups](https://b2g.org/blog/how-to-find-public-tenders-worldwide/)
 
 ## Contact

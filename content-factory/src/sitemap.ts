@@ -1,15 +1,26 @@
 import fs from 'fs';
 import path from 'path';
 import { XMLBuilder, XMLParser } from 'fast-xml-parser';
-import { writeLlmsTxt } from './llms';
+import contentPlan from '../config/content-plan.json';
+import { isFallbackSlug, writeLlmsTxt } from './llms';
 
 function getSitemapPath(): string {
   return path.join(process.env.SITE_PUBLIC_DIR || '../public', 'sitemap.xml');
 }
 
+function getContentDir(): string {
+  return path.resolve(process.env.CONTENT_DIR || '../content/blog');
+}
+
 function getBaseUrl(): string {
   return (process.env.SITE_BASE_URL || 'https://b2g.org').replace(/\/$/, '');
 }
+
+function repoRoot(): string {
+  return path.resolve(__dirname, '../..');
+}
+
+type ArticlePriority = 'high' | 'medium' | 'low';
 
 interface SitemapEntry {
   loc: string;
@@ -18,6 +29,21 @@ interface SitemapEntry {
   priority: string;
   'xhtml:link'?: Array<{ '@_rel': string; '@_hreflang': string; '@_href': string }>;
 }
+
+/**
+ * App routes that currently 404 as static HTML (soft SPA shell).
+ * Advertise them again only after a prerender writes `<segment>/index.html`
+ * into public/ or dist/. Home and /blog/ stay listed: both already return 200 HTML.
+ */
+const CONDITIONAL_STATIC_ROUTES: Array<{
+  segment: string;
+  changefreq: SitemapEntry['changefreq'];
+  priority: string;
+}> = [
+  { segment: 'platform', changefreq: 'weekly', priority: '0.6' },
+  { segment: 'ai', changefreq: 'weekly', priority: '0.8' },
+  { segment: 'data-room', changefreq: 'weekly', priority: '0.5' },
+];
 
 function withTrailingSlash(url: string): string {
   return url.endsWith('/') ? url : `${url}/`;
@@ -31,14 +57,23 @@ function hreflang(url: string): SitemapEntry['xhtml:link'] {
   ];
 }
 
+/** True when public/ or dist/ contains a real HTML document for the route. */
+export function conditionalStaticRouteIsLive(segment: string): boolean {
+  const roots = [
+    path.resolve(process.env.SITE_PUBLIC_DIR || path.join(repoRoot(), 'public')),
+    path.resolve(process.env.SITE_DIST_DIR || path.join(repoRoot(), 'dist')),
+  ];
+  return roots.some((root) => fs.existsSync(path.join(root, segment, 'index.html')));
+}
+
 function staticEntries(lastmod: string): SitemapEntry[] {
   const BASE_URL = getBaseUrl();
-  return [
+  const entries: SitemapEntry[] = [
     {
       loc: withTrailingSlash(BASE_URL),
       lastmod,
       changefreq: 'weekly',
-      priority: '1.0',
+      priority: '1',
       'xhtml:link': hreflang(BASE_URL),
     },
     {
@@ -48,34 +83,70 @@ function staticEntries(lastmod: string): SitemapEntry[] {
       priority: '0.8',
       'xhtml:link': hreflang(`${BASE_URL}/blog/`),
     },
-    {
-      loc: `${BASE_URL}/platform/`,
-      lastmod,
-      changefreq: 'weekly',
-      priority: '0.6',
-      'xhtml:link': hreflang(`${BASE_URL}/platform/`),
-    },
-    {
-      loc: `${BASE_URL}/ai/`,
-      lastmod,
-      changefreq: 'weekly',
-      priority: '0.8',
-      'xhtml:link': hreflang(`${BASE_URL}/ai/`),
-    },
-    {
-      loc: `${BASE_URL}/data-room/`,
-      lastmod,
-      changefreq: 'weekly',
-      priority: '0.5',
-      'xhtml:link': hreflang(`${BASE_URL}/data-room/`),
-    },
   ];
+
+  for (const route of CONDITIONAL_STATIC_ROUTES) {
+    if (!conditionalStaticRouteIsLive(route.segment)) continue;
+    const loc = `${BASE_URL}/${route.segment}/`;
+    entries.push({
+      loc,
+      lastmod,
+      changefreq: route.changefreq,
+      priority: route.priority,
+      'xhtml:link': hreflang(loc),
+    });
+  }
+
+  return entries;
+}
+
+function blogSlugFromLoc(loc: string): string | null {
+  const prefix = `${getBaseUrl()}/blog/`;
+  const normalized = withTrailingSlash(loc);
+  if (!normalized.startsWith(prefix)) return null;
+  const slug = normalized.slice(prefix.length).replace(/\/$/, '');
+  if (!slug || slug.includes('/')) return null;
+  return slug;
+}
+
+function isUnpublishedStaticLoc(loc: string): boolean {
+  const normalized = withTrailingSlash(loc);
+  const base = getBaseUrl();
+  return CONDITIONAL_STATIC_ROUTES.some(
+    (route) =>
+      normalized === `${base}/${route.segment}/` && !conditionalStaticRouteIsLive(route.segment),
+  );
+}
+
+function isAdvertisableEntry(entry: SitemapEntry): boolean {
+  const slug = blogSlugFromLoc(entry.loc);
+  if (slug && isFallbackSlug(slug)) return false;
+  if (isUnpublishedStaticLoc(entry.loc)) return false;
+  return true;
+}
+
+function priorityForSlug(slug: string, fallback: ArticlePriority = 'medium'): ArticlePriority {
+  const article = (contentPlan as Array<{ slug?: string; priority?: string }>).find(
+    (item) => item.slug === slug,
+  );
+  if (article?.priority === 'high' || article?.priority === 'medium' || article?.priority === 'low') {
+    return article.priority;
+  }
+  return fallback;
+}
+
+function publishedDateForSlug(slug: string, fallback: string): string {
+  const filePath = path.join(getContentDir(), `${slug}.mdx`);
+  if (!fs.existsSync(filePath)) return fallback;
+  const raw = fs.readFileSync(filePath, 'utf-8');
+  const match = raw.match(/^datePublished:\s*["']?(\d{4}-\d{2}-\d{2})/m);
+  return match?.[1] ?? fallback;
 }
 
 function buildBlogEntry(
   slug: string,
   lastmod: string,
-  priority: 'high' | 'medium' | 'low' = 'medium',
+  priority: ArticlePriority = 'medium',
 ): SitemapEntry {
   const BASE_URL = getBaseUrl();
   const loc = `${BASE_URL}/blog/${slug}/`;
@@ -88,6 +159,10 @@ function buildBlogEntry(
     priority: priorityMap[priority],
     'xhtml:link': hreflang(loc),
   };
+}
+
+function sortEntries(entries: SitemapEntry[]): SitemapEntry[] {
+  return [...entries].sort((a, b) => parseFloat(b.priority) - parseFloat(a.priority));
 }
 
 function readSitemap(): { urlset: { url: SitemapEntry[] } } {
@@ -126,16 +201,25 @@ ${builder.build(sitemap.urlset)}
 export async function addArticleToSitemap(
   slug: string,
   datePublished: string,
-  priority: 'high' | 'medium' | 'low' = 'medium',
+  priority: ArticlePriority = 'medium',
 ): Promise<void> {
   const BASE_URL = getBaseUrl();
-  const newEntry = buildBlogEntry(slug, datePublished, priority);
   const sitemap = readSitemap();
-  const loc = `${BASE_URL}/blog/${slug}/`;
+  sitemap.urlset.url = sitemap.urlset.url.filter(isAdvertisableEntry);
 
-  sitemap.urlset.url = sitemap.urlset.url.filter((u) => u.loc !== loc);
+  if (isFallbackSlug(slug)) {
+    sitemap.urlset.url = sortEntries(sitemap.urlset.url);
+    writeSitemap(sitemap);
+    writeLlmsTxt();
+    console.log(`⏭️ Sitemap skipped fallback slug: /blog/${slug}/`);
+    return;
+  }
+
+  const newEntry = buildBlogEntry(slug, datePublished, priority);
+  const loc = `${BASE_URL}/blog/${slug}/`;
+  sitemap.urlset.url = sitemap.urlset.url.filter((u) => withTrailingSlash(u.loc) !== loc);
   sitemap.urlset.url.push(newEntry);
-  sitemap.urlset.url.sort((a, b) => parseFloat(b.priority) - parseFloat(a.priority));
+  sitemap.urlset.url = sortEntries(sitemap.urlset.url);
 
   writeSitemap(sitemap);
   writeLlmsTxt();
@@ -145,17 +229,19 @@ export async function addArticleToSitemap(
 export function regenerateSitemap(
   slugs: string[],
   defaultDate: string = new Date().toISOString().split('T')[0],
-): void {
-  const blogEntries = slugs.map((slug) => buildBlogEntry(slug, defaultDate, 'medium'));
+): number {
+  const indexable = slugs.filter((slug) => !isFallbackSlug(slug));
+  const blogEntries = indexable.map((slug) =>
+    buildBlogEntry(slug, publishedDateForSlug(slug, defaultDate), priorityForSlug(slug)),
+  );
   const sitemap = {
     urlset: {
-      url: [...staticEntries(defaultDate), ...blogEntries].sort(
-        (a, b) => parseFloat(b.priority) - parseFloat(a.priority),
-      ),
+      url: sortEntries([...staticEntries(defaultDate), ...blogEntries]),
     },
   };
 
   writeSitemap(sitemap);
-  writeLlmsTxt(slugs);
+  writeLlmsTxt(indexable);
   console.log(`✅ Sitemap regenerated with ${blogEntries.length} blog entries`);
+  return blogEntries.length;
 }
