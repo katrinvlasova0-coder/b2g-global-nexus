@@ -133,7 +133,7 @@ jobs:
 
       - name: Validate safe-fallback templates
         if: steps.gen.outputs.run == 'true' || github.event_name == 'workflow_dispatch'
-        run: cd content-factory && npm run test:fallback
+        run: cd content-factory && npm run test:fallback && npm run test:publish-date
 
       - name: Run integration test
         if: github.event_name == 'workflow_dispatch'

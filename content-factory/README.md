@@ -48,3 +48,4 @@ Schedule: cron `0 8 * * *` (08:00 UTC daily), publish every other day from ancho
 - Required CTA: *Leave your contacts for a consultation on tender selection and documentation preparation.*
 - Required disclaimer: informational / educational purposes only
 - Blocked: guaranteed wins, numeric win-rates, guaranteed financing, B2G as a government body, invented experts
+- Public dates: `datePublished` and `dateModified` are the UTC day the article is generated. `plannedDate` only orders the queue. Safe fallbacks keep the date in their filename.

@@ -5,6 +5,7 @@ import { ensureRobotsTxt } from './robots';
 import { regenerateSitemap } from './sitemap';
 import { validateArticle } from './validator';
 import { getMinWordCount } from './generator';
+import { readPublishedDate, utcPublishDate } from './publish-date';
 import type { ArticleRequest } from './prompts/types';
 import fs from 'fs';
 import path from 'path';
@@ -94,7 +95,11 @@ export async function runMockGenerateTest(
   }
 
   await publishArticle(request.slug, content, request, false);
-  await addArticleToSitemap(request.slug, request.plannedDate, request.priority);
+  await addArticleToSitemap(
+    request.slug,
+    readPublishedDate(content) ?? utcPublishDate(),
+    request.priority,
+  );
   console.log(`\n🎉 Mock article published: /blog/${request.slug}`);
   console.log('   ⚠️  This is test content — delete or replace when Claude API is available.');
 }
