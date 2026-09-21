@@ -1,10 +1,12 @@
 import type { ArticleRequest } from './types';
 import { clusterTagEn } from '../../config/cluster-tags';
+import { utcPublishDate } from '../publish-date';
 
 export function buildArticlePrompt(
   req: ArticleRequest,
   images: Array<{ url: string; altText: string }>,
   internalLinks: Array<{ slug: string; text: string }>,
+  publishDate: string = utcPublishDate(),
 ): string {
   const imgMarkdown = images
     .slice(1)
@@ -33,6 +35,7 @@ Write a complete English educational article for the B2G Global blog (public pro
 - **Target word count:** ${req.targetLength} words
 - **Category:** ${req.category} (one of: Tenders, Documentation, Financing, Contractors)
 - **Audience:** ${getSegmentDesc(req.taSegments)}
+- **Publish date (UTC):** ${publishDate}. Use this exact value for datePublished and dateModified. The content-plan plannedDate is only a queue schedule.
 
 ## IMAGES
 - Do **not** paste the cover image (\`coverImage\` in frontmatter) into the body. The site already renders it above the article.
@@ -60,8 +63,8 @@ title: "${title}"
 titleEn: "${title}"
 description: "[150–160 characters, keyword '${keyword}', no win-rate claims]"
 descriptionEn: "[same as description]"
-datePublished: "${req.plannedDate}"
-dateModified: "${req.plannedDate}"
+datePublished: "${publishDate}"
+dateModified: "${publishDate}"
 author:
   name: "${authorName}"
   role: "${authorRole}"

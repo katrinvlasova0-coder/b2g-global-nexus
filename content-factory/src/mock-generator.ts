@@ -1,6 +1,7 @@
 import type { ArticleRequest } from './prompts/types';
 import { clusterTagEn } from '../config/cluster-tags';
 import type { UnsplashImage } from './images';
+import { utcPublishDate } from './publish-date';
 
 const DEPTH = [
   'Public procurement is a rules-based market. The notice, the tender documents and the evaluation grid are the primary sources — not a sales conversation.',
@@ -45,7 +46,11 @@ function faqItems(req: ArticleRequest): Array<{ q: string; a: string }> {
   ];
 }
 
-export function generateMockArticle(req: ArticleRequest, images: UnsplashImage[]): string {
+export function generateMockArticle(
+  req: ArticleRequest,
+  images: UnsplashImage[],
+  publishDate: string = utcPublishDate(),
+): string {
   const cover = images[0]?.url.replace('w=800', 'w=1200') ?? images[0]?.url ?? '';
   const kw = req.keywordEn || req.keywordDe;
   const title = req.titleEn || req.titleDe;
@@ -58,8 +63,8 @@ title: "${title}"
 titleEn: "${title}"
 description: "${title.slice(0, 120)} Educational briefing on ${kw} for public-procurement teams in 2026."
 descriptionEn: "${title.slice(0, 120)} Educational briefing on ${kw} for public-procurement teams in 2026."
-datePublished: "${req.plannedDate}"
-dateModified: "${req.plannedDate}"
+datePublished: "${publishDate}"
+dateModified: "${publishDate}"
 author:
   name: "B2G Editorial"
   role: "Editorial"

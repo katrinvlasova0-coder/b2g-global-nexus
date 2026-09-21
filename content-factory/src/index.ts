@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { generateArticle, getMinWordCount } from './generator';
+import { readPublishedDate, utcPublishDate } from './publish-date';
 import { publishArticle } from './publisher';
 import { addArticleToSitemap, regenerateSitemap } from './sitemap';
 import { ensureRobotsTxt } from './robots';
@@ -49,7 +50,7 @@ program
 
       if (!options.dryRun) {
         await publishArticle(slug, content, request, options.commit ?? false);
-        await addArticleToSitemap(slug, request.plannedDate, request.priority);
+        await addArticleToSitemap(slug, readPublishedDate(content) ?? utcPublishDate(), request.priority);
         markAsCompleted(slug);
         console.log(`\n🎉 Article published: /blog/${slug}`);
       } else {
@@ -103,7 +104,11 @@ program
         markInProgress(article.slug);
         const content = await generateArticle(article, { mock: options.mock });
         await publishArticle(article.slug, content, article, options.commit ?? false);
-        await addArticleToSitemap(article.slug, article.plannedDate, article.priority);
+        await addArticleToSitemap(
+          article.slug,
+          readPublishedDate(content) ?? utcPublishDate(),
+          article.priority,
+        );
         markAsCompleted(article.slug);
         successCount++;
         console.log(`✅ Done: /blog/${article.slug}`);

@@ -9,6 +9,7 @@ import { validateArticle } from './validator';
 import { getInternalLinks, selectAuthor } from './queue';
 import { computeArticleStats, formatStatsLog } from './stats';
 import { generateMockArticle } from './mock-generator';
+import { stampPublishDates, utcPublishDate } from './publish-date';
 
 const LOG_DIR = path.join(__dirname, '../logs');
 
@@ -62,9 +63,10 @@ function logGeneration(slug: string, data: Record<string, unknown>): void {
 
 export async function generateArticle(
   request: ArticleRequest,
-  options: { mock?: boolean } = {},
+  options: { mock?: boolean; publishDate?: string } = {},
 ): Promise<string> {
   const req = enrichRequest(request);
+  const publishDate = options.publishDate ?? utcPublishDate();
   const useMock = options.mock || process.env.MOCK_GENERATION === '1';
 
   const imageQueries =
@@ -73,8 +75,8 @@ export async function generateArticle(
 
   if (useMock) {
     console.log(`🧪 Mock generation (no Claude API): ${req.slug}...`);
-    const articleContent = generateMockArticle(req, images);
-    return finalizeArticle(req, articleContent, { mock: true, minWordCount: 600 });
+    const articleContent = generateMockArticle(req, images, publishDate);
+    return finalizeArticle(req, articleContent, { mock: true, minWordCount: 600, publishDate });
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -86,7 +88,7 @@ export async function generateArticle(
   }
   const internalLinks = getInternalLinks(req.slug, 5);
 
-  const userPrompt = buildArticlePrompt(req, images, internalLinks);
+  const userPrompt = buildArticlePrompt(req, images, internalLinks, publishDate);
 
   const client = new Anthropic({ apiKey });
 
@@ -105,17 +107,18 @@ export async function generateArticle(
   }
 
   const articleContent = extractMdxContent(textBlock.text);
-  return finalizeArticle(req, articleContent, { mock: false });
+  return finalizeArticle(req, articleContent, { mock: false, publishDate });
 }
 
 function finalizeArticle(
   req: ArticleRequest,
   articleContent: string,
-  meta: { mock: boolean; minWordCount?: number },
+  meta: { mock: boolean; minWordCount?: number; publishDate: string },
 ): string {
+  const stamped = stampPublishDates(articleContent, meta.publishDate);
   const minWordCount = meta.minWordCount ?? getMinWordCount(req.format);
   const validation = validateArticle(
-    articleContent,
+    stamped,
     req.keywordEn || req.keywordDe,
     minWordCount,
   );
@@ -132,13 +135,13 @@ function finalizeArticle(
     validation.warnings.forEach((w) => console.warn(w));
   }
 
-  const stats = computeArticleStats(articleContent, validation);
+  const stats = computeArticleStats(stamped, validation);
   console.log(meta.mock ? '✅ Mock validation passed:' : '✅ Validation passed:');
   console.log(`   ${formatStatsLog(stats)}`);
 
   logGeneration(req.slug, { stats, warnings: validation.warnings, mock: meta.mock });
 
-  return articleContent;
+  return stamped;
 }
 
 export { getMinWordCount };
