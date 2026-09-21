@@ -1,34 +1,5 @@
 [
   {
-    "id": 1,
-    "cluster": "Tenders",
-    "slug": "how-to-find-public-tenders-worldwide",
-    "titleDe": "How to find public tenders worldwide: sources, filters, daily roundups",
-    "titleEn": "How to find public tenders worldwide: sources, filters, daily roundups",
-    "keywordDe": "find public tenders",
-    "keywordEn": "find public tenders",
-    "lsiKeywords": [
-      "public procurement portals",
-      "tender search",
-      "e-procurement"
-    ],
-    "format": "Howto",
-    "category": "Tenders",
-    "unsplashQuery": "government building documents worldwide",
-    "status": "pending",
-    "priority": "high",
-    "searchVolDe": 2400,
-    "kd": 28,
-    "searchVolEn": 2400,
-    "targetLength": 1500,
-    "taSegments": [
-      "contractors",
-      "consultants"
-    ],
-    "plannedDate": "2026-08-20",
-    "language": "EN"
-  },
-  {
     "id": 2,
     "cluster": "Tenders",
     "slug": "how-to-read-a-tender-notice",
