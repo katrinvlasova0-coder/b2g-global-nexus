@@ -27,6 +27,36 @@
     ],
     "plannedDate": "2026-08-20",
     "language": "EN",
-    "completedAt": "2026-09-21T15:53:58.852Z"
+    "completedAt": "2026-08-20"
+  },
+  {
+    "id": 2,
+    "cluster": "Tenders",
+    "slug": "how-to-read-a-tender-notice",
+    "titleDe": "How to read a tender notice: CPV, lots, deadlines, eligibility",
+    "titleEn": "How to read a tender notice: CPV, lots, deadlines, eligibility",
+    "keywordDe": "read a tender notice",
+    "keywordEn": "read a tender notice",
+    "lsiKeywords": [
+      "CPV codes",
+      "tender lots",
+      "selection criteria"
+    ],
+    "format": "Explainer",
+    "category": "Tenders",
+    "unsplashQuery": "person reading official documents desk",
+    "status": "completed",
+    "priority": "high",
+    "searchVolDe": 1600,
+    "kd": 22,
+    "searchVolEn": 1600,
+    "targetLength": 1500,
+    "taSegments": [
+      "contractors",
+      "consultants"
+    ],
+    "plannedDate": "2026-08-22",
+    "language": "EN",
+    "completedAt": "2026-09-23T13:14:10.939Z"
   }
 ]
