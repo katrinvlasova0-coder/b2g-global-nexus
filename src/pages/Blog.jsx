@@ -5,7 +5,7 @@ import Footer from '@/components/landing/Footer';
 import SeoHead from '@/components/blog/SeoHead';
 import BlogHeroBand from '@/components/blog/BlogHeroBand';
 import BackToTop from '@/components/blog/BackToTop';
-import { BLOG_CATEGORIES, getAllPosts, getPostsByCategory } from '@/lib/blog';
+import { BLOG_CATEGORIES, filterPostsByCategory, getIndexablePosts } from '@/lib/blog';
 import { canonicalBlogIndexUrl } from '@/lib/blog-seo';
 import { useLanguage } from '@/lib/LanguageContext';
 
@@ -14,10 +14,10 @@ export default function Blog() {
   const copy = t.blog;
   const [params, setParams] = useSearchParams();
   const category = params.get('category') || '';
-  const posts = useMemo(
-    () => (category ? getPostsByCategory(category) : getAllPosts()),
-    [category],
-  );
+  const posts = useMemo(() => {
+    const indexable = getIndexablePosts();
+    return category ? filterPostsByCategory(indexable, category) : indexable;
+  }, [category]);
 
   const setCategory = (next) => {
     const nextParams = new URLSearchParams(params);

@@ -122,6 +122,9 @@ export function parseBlogMdx(slug, raw) {
     featured: Boolean(frontmatter.featured),
     tags: Array.isArray(frontmatter.tags) ? frontmatter.tags : [],
     faq: Array.isArray(frontmatter.faq) ? frontmatter.faq : [],
+    fallback: frontmatter.fallback === true || frontmatter.fallback === 'true',
+    mode: typeof frontmatter.mode === 'string' ? frontmatter.mode : '',
+    topicSlug: typeof frontmatter.topicSlug === 'string' ? frontmatter.topicSlug : '',
     body,
   };
 }

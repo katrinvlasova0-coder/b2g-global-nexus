@@ -28,12 +28,16 @@ export default function SeoHead({
   image,
   jsonLd,
   type = 'article',
+  robots = 'index,follow',
 }) {
   useEffect(() => {
     const previousTitle = document.title;
     if (title) document.title = title;
     if (description) {
       upsertMeta('meta[name="description"]', { name: 'description', content: description });
+    }
+    if (robots) {
+      upsertMeta('meta[name="robots"]', { name: 'robots', content: robots });
     }
     if (canonical) upsertLink('canonical', canonical);
     upsertMeta('meta[property="og:title"]', { property: 'og:title', content: title });
@@ -58,9 +62,10 @@ export default function SeoHead({
 
     return () => {
       document.title = previousTitle;
+      upsertMeta('meta[name="robots"]', { name: 'robots', content: 'index,follow' });
       script?.remove();
     };
-  }, [title, description, canonical, image, jsonLd, type]);
+  }, [title, description, canonical, image, jsonLd, type, robots]);
 
   return null;
 }

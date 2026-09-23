@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { XMLBuilder, XMLParser } from 'fast-xml-parser';
 import contentPlan from '../config/content-plan.json';
-import { isFallbackSlug, writeLlmsTxt } from './llms';
+import { isFallbackArticle, writeLlmsTxt } from './llms';
 
 function getSitemapPath(): string {
   return path.join(process.env.SITE_PUBLIC_DIR || '../public', 'sitemap.xml');
@@ -120,7 +120,7 @@ function isUnpublishedStaticLoc(loc: string): boolean {
 
 function isAdvertisableEntry(entry: SitemapEntry): boolean {
   const slug = blogSlugFromLoc(entry.loc);
-  if (slug && isFallbackSlug(slug)) return false;
+  if (slug && isFallbackArticle(slug)) return false;
   if (isUnpublishedStaticLoc(entry.loc)) return false;
   return true;
 }
@@ -207,7 +207,7 @@ export async function addArticleToSitemap(
   const sitemap = readSitemap();
   sitemap.urlset.url = sitemap.urlset.url.filter(isAdvertisableEntry);
 
-  if (isFallbackSlug(slug)) {
+  if (isFallbackArticle(slug)) {
     sitemap.urlset.url = sortEntries(sitemap.urlset.url);
     writeSitemap(sitemap);
     writeLlmsTxt();
@@ -230,7 +230,7 @@ export function regenerateSitemap(
   slugs: string[],
   defaultDate: string = new Date().toISOString().split('T')[0],
 ): number {
-  const indexable = slugs.filter((slug) => !isFallbackSlug(slug));
+  const indexable = slugs.filter((slug) => !isFallbackArticle(slug));
   const blogEntries = indexable.map((slug) =>
     buildBlogEntry(slug, publishedDateForSlug(slug, defaultDate), priorityForSlug(slug)),
   );
