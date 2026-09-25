@@ -57,6 +57,36 @@
     ],
     "plannedDate": "2026-08-22",
     "language": "EN",
-    "completedAt": "2026-09-23T13:14:10.939Z"
+    "completedAt": "2026-08-22"
+  },
+  {
+    "id": 3,
+    "cluster": "Tenders",
+    "slug": "public-procurement-eligibility-checks",
+    "titleDe": "Public procurement eligibility checks: exclusion, capacity, references",
+    "titleEn": "Public procurement eligibility checks: exclusion, capacity, references",
+    "keywordDe": "procurement eligibility",
+    "keywordEn": "procurement eligibility",
+    "lsiKeywords": [
+      "exclusion grounds",
+      "economic capacity",
+      "past performance"
+    ],
+    "format": "Explainer",
+    "category": "Tenders",
+    "unsplashQuery": "compliance checklist office",
+    "status": "completed",
+    "priority": "high",
+    "searchVolDe": 900,
+    "kd": 20,
+    "searchVolEn": 900,
+    "targetLength": 1500,
+    "taSegments": [
+      "contractors",
+      "partners"
+    ],
+    "plannedDate": "2026-08-24",
+    "language": "EN",
+    "completedAt": "2026-09-25T13:10:34.933Z"
   }
 ]
