@@ -20,6 +20,23 @@ export function isFallbackSlug(slug: string): boolean {
   return FALLBACK_SLUG.test(slug);
 }
 
+/** Frontmatter `fallback: true` or `mode: fallback|mock` marks non-indexable copy. */
+export function mdxMarksFallback(raw: string): boolean {
+  const match = String(raw || '').match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  if (!match) return false;
+  const frontmatter = match[1];
+  if (/^fallback:\s*["']?true["']?\s*$/m.test(frontmatter)) return true;
+  return /^mode:\s*["']?(fallback|mock)["']?\s*$/m.test(frontmatter);
+}
+
+export function isFallbackArticle(slug: string, raw?: string): boolean {
+  if (isFallbackSlug(slug)) return true;
+  if (typeof raw === 'string') return mdxMarksFallback(raw);
+  const filePath = path.join(getContentDir(), `${slug}.mdx`);
+  if (!fs.existsSync(filePath)) return false;
+  return mdxMarksFallback(fs.readFileSync(filePath, 'utf-8'));
+}
+
 function listSlugs(explicit?: string[]): string[] {
   const fromDisk = (): string[] => {
     const dir = getContentDir();
@@ -30,7 +47,7 @@ function listSlugs(explicit?: string[]): string[] {
       .map((f) => f.replace(/\.mdx$/, ''));
   };
 
-  return (explicit ?? fromDisk()).filter((slug) => !isFallbackSlug(slug)).sort();
+  return (explicit ?? fromDisk()).filter((slug) => !isFallbackArticle(slug)).sort();
 }
 
 function titleFromMdx(slug: string): string {

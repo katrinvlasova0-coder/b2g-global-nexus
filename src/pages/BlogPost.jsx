@@ -11,8 +11,8 @@ import ArticleConsultBanner from '@/components/blog/ArticleConsultBanner';
 import BlogReadMore from '@/components/blog/BlogReadMore';
 import BackToTop from '@/components/blog/BackToTop';
 import PageNotFound from '@/lib/PageNotFound';
-import { getAllPosts, getPostBySlug, getRelatedPosts, splitBodyForBanner } from '@/lib/blog';
-import { buildArticleJsonLd, canonicalBlogUrl } from '@/lib/blog-seo';
+import { getIndexablePosts, getPostBySlug, getRelatedPosts, splitBodyForBanner } from '@/lib/blog';
+import { buildArticleJsonLd, canonicalForPost, isFallbackPost, robotsForPost } from '@/lib/blog-seo';
 import { useLanguage } from '@/lib/LanguageContext';
 
 const markdownComponents = {
@@ -59,9 +59,11 @@ export default function BlogPost() {
 
   if (!post) return <PageNotFound />;
 
-  const canonical = canonicalBlogUrl(post.slug);
-  const jsonLd = buildArticleJsonLd(post);
-  const related = getRelatedPosts(getAllPosts(), post.slug, 3);
+  const indexable = getIndexablePosts();
+  const fallback = isFallbackPost(post);
+  const canonical = canonicalForPost(post, indexable);
+  const jsonLd = fallback ? undefined : buildArticleJsonLd(post);
+  const related = getRelatedPosts(indexable, post.slug, 3);
   const { before, after } = splitBodyForBanner(post.body);
 
   return (
@@ -72,6 +74,7 @@ export default function BlogPost() {
         canonical={canonical}
         image={post.coverImage}
         jsonLd={jsonLd}
+        robots={robotsForPost(post)}
       />
       <Navbar />
       <main className="pt-16">

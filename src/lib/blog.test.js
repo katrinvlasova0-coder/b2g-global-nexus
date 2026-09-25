@@ -46,6 +46,26 @@ test('parseBlogMdx reads frontmatter, FAQ list and body', () => {
   assert.equal(post.faq[0].question, 'What is a tender notice?');
   assert.match(post.body, /A tender notice is the primary source/);
   assert.equal(post.featured, false);
+  assert.equal(post.fallback, false);
+  assert.equal(post.mode, '');
+});
+
+test('parseBlogMdx keeps fallback and mock frontmatter flags', () => {
+  const post = parseBlogMdx(
+    'pipeline-check',
+    `---
+title: "Pipeline check"
+fallback: true
+mode: "mock"
+topicSlug: "how-to-find-public-tenders-worldwide"
+---
+
+Body.
+`,
+  );
+  assert.equal(post.fallback, true);
+  assert.equal(post.mode, 'mock');
+  assert.equal(post.topicSlug, 'how-to-find-public-tenders-worldwide');
 });
 
 test('BLOG_CATEGORIES match the landing capability clusters', () => {

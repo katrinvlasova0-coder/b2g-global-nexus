@@ -1,4 +1,5 @@
 import { parseBlogMdx, sortPosts, filterPostsByCategory } from './blog-parse.js';
+import { filterIndexablePosts } from './blog-seo.js';
 
 const modules = import.meta.glob('../../content/blog/*.mdx', {
   eager: true,
@@ -16,6 +17,11 @@ export function getAllPosts() {
     parseBlogMdx(fileSlug(filePath), raw),
   );
   return sortPosts(posts);
+}
+
+/** Published posts that may appear in listings and sitemaps. Fallback files stay on disk. */
+export function getIndexablePosts() {
+  return filterIndexablePosts(getAllPosts());
 }
 
 export function getPostBySlug(slug) {

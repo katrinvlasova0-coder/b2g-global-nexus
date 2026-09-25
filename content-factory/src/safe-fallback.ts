@@ -336,6 +336,8 @@ category: ${yamlString(template.category)}
 readTime: "8 min"
 coverImage: ${yamlString(images[0].url)}
 featured: false
+fallback: true
+mode: "fallback"
 tags: ${JSON.stringify([template.keywordEn, template.category, 'public procurement', '2026'])}
 tagsEn: ${JSON.stringify([template.keywordEn, template.category, 'public procurement', '2026'])}
 faq:

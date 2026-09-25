@@ -5,7 +5,11 @@ import { parseBlogMdx } from './src/lib/blog-parse.js';
 import {
   buildArticleJsonLd,
   canonicalBlogIndexUrl,
-  canonicalBlogUrl,
+  canonicalForPost,
+  filterIndexablePosts,
+  isFallbackPost,
+  robotsForPost,
+  withRobotsMeta,
 } from './src/lib/blog-seo.js';
 
 function escapeHtml(value) {
@@ -20,8 +24,9 @@ function replaceAttr(html, pattern, replacement) {
   return html.replace(pattern, replacement);
 }
 
-function applyMeta(indexHtml, { title, description, canonical, image, jsonLd, bodyHtml }) {
+function applyMeta(indexHtml, { title, description, canonical, image, jsonLd, bodyHtml, robots }) {
   let html = indexHtml;
+  html = withRobotsMeta(html, robots || 'index,follow');
   html = replaceAttr(html, /<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)}</title>`);
   html = replaceAttr(
     html,
@@ -91,11 +96,13 @@ export function prerenderBlog() {
 
       mkdirSync(join(dist, 'blog'), { recursive: true });
 
+      const indexable = filterIndexablePosts(posts);
       const listingHtml = applyMeta(indexHtml, {
         title: 'Tender briefings · B2G Global',
         description:
           'English educational guides on finding tenders, preparing documentation, contract financing instruments, and selecting contractors.',
         canonical: canonicalBlogIndexUrl(),
+        robots: 'index,follow',
         jsonLd: {
           '@context': 'https://schema.org',
           '@type': 'CollectionPage',
@@ -103,7 +110,7 @@ export function prerenderBlog() {
           url: canonicalBlogIndexUrl(),
           inLanguage: 'en',
         },
-        bodyHtml: `<main><h1>Tender briefings</h1><ul>${posts
+        bodyHtml: `<main><h1>Tender briefings</h1><ul>${indexable
           .map(
             (post) =>
               `<li><a href="/blog/${post.slug}/">${escapeHtml(post.title)}</a></li>`,
@@ -116,12 +123,14 @@ export function prerenderBlog() {
         const dir = join(dist, 'blog', post.slug);
         mkdirSync(dir, { recursive: true });
         const body = marked.parse(post.body || '', { gfm: true, breaks: false });
+        const fallback = isFallbackPost(post);
         const page = applyMeta(indexHtml, {
           title: `${post.title} · B2G Global`,
           description: post.description,
-          canonical: canonicalBlogUrl(post.slug),
+          canonical: canonicalForPost(post, posts),
           image: post.coverImage,
-          jsonLd: buildArticleJsonLd(post),
+          robots: robotsForPost(post),
+          jsonLd: fallback ? null : buildArticleJsonLd(post),
           bodyHtml: `<article><h1>${escapeHtml(post.title)}</h1>${body}</article>`,
         });
         writeFileSync(join(dir, 'index.html'), page);

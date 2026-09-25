@@ -72,6 +72,7 @@ category: "${req.category}"
 readTime: "8 min"
 coverImage: "${cover}"
 featured: false
+mode: "mock"
 tags: ["${kw}", "${clusterTagEn(req.cluster)}", "public procurement", "2026"]
 tagsEn: ["${kw}", "${clusterTagEn(req.cluster)}", "public procurement", "2026"]
 faq:
